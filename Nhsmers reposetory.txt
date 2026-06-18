@@ -1,0 +1,104 @@
+[Landing Page]
+[[Title]] Welcome to the NHSMers Repository
+[[Sub-title]] Your ultimate guide to mastering NHSM
+[[Catchy call]] Learn more about NHSM!
+
+[About NHSM]
+[[School Description]]Established by presidential decree in 2021, the National Higher School of Mathematics (NHSM) is Algeria’s first institution dedicated to awarding engineering degrees in mathematics. Strategically located at the Sidi Abdellah technological hub in Algiers, the school serves as a center of excellence for the nation’s future scientific leaders. To maintain its high academic standards, NHSM exclusively recruits top-tier Baccalaureate graduates from the Mathematics, Experimental Sciences, and Technical Mathematics streams.
+[Link to school website] https://nhsm.dz/
+[Road map for the school]NHSM offers a 5-year program to all students. It starts with 2 preparatory years, followed by a common core year. Finally, students spend their last 2 years in their chosen specialties (Modeling and Simulation, Cryptography Coding and Security, Statistics Econometrics for Actuarial Sciences, Mathematical Physics). Students also have the chance to participate in the prestigious international program IMM (International Masters in Mathematics).[Link to IMM website] https://internationalmathematicsmaster.org/program-overview/algeria/
+[[Student Life]]
+[[[Clubs]]]NHSM hosts a number of clubs in different fields such as: Eureka Club, M4T Club, Stratos Club, 8squared Club, and Finmatics Club.
+[[[Campus]]]Students reside at 2 residencies in the Student Hub (Mahelma 3 for boys and Mahelma 4 for girls, shared with ENSIA students) and have access to the full properties of the technological pole (Main Library, Student Hub).
+The Residency: Hosting 1,000 students per residency, giving students clean individual rooms equipped with a bed, mattress, pillow, desk, and chair. The residency features showers, a large courtyard, an on-campus shop, a university restaurant (resto), a stadium, study rooms, a TV room, and a doctor's office.
+The Pole:Student Hub: Contains the general restaurant, doctors' offices, a laundry room, a shop, a cafeteria, and a dedicated resting area.Main Library: Features quiet study rooms open to all pole students and large resting spaces.
+[Navigation Links][Link to Resources Page] | [Link to Specialties Page]
+
+[Resources Page]
+[UI Instruction: Visual Concept]The background should be dark. The main UI is a glowing, light-drawn "Tree" (SVG line-art animation, not a real photo).
+The Trunk (Roots to mid-tree): Represents the Common Core (Year 1 & Year 2).
+The Branching Point: Represents Year 3.
+The Branches: 4 distinct glowing branches splitting off from Year 3, representing the 4 main specialties for Year 4 & Year 5.
+Interaction: Clicking any Year node on the tree opens a directory list directly below the tree. 
+Every node/directory must have a unique URL routing (e.g., /resources/y1/s1/module_name/) so students can link directly to specific folders.
+[[Directory Structure]]
+[Tree Node] First Year (Trunk)
+[Tree Node] Second Year (Trunk)
+[Tree Node] Third Year (Branching Point)
+[Tree Node] Fourth & Fifth Year (Branches - 4 Paths)
+Branch 1: Modeling and Simulation
+Branch 2: Cryptography Coding and Security
+Branch 3: Statistics Econometrics for Actuarial Sciences
+Branch 4: Mathematical Physics
+[[List Layout (Appears on click)]]
+When a Year is clicked, display:
+Semester 1 | Semester 2
+When semester clicked modules apear
+[Module Name] (e.g., Analysis 1, Algebra 1, Physics)
+when module clicked:
+Lectures (Cours)
+Worksheets (TD)
+Labs (TP)
+Projects
+Exams
+External Resources
+
+[Specialties Page]
+[UI Instruction: Desktop Layout & Animation]Title centered at the top: "Discover Our Specialties".
+Center of the screen: 4 diamonds arranged together to form one large diamond shape.
+On Click Animation: When a user clicks one of the 4 diamonds, the 4 diamonds smoothly animate and disperse into the 4 corners of the new sceen, like a special section with borders connecting the four diamond and the clicked diamond is fully colored while the others are while with a border of the smae color.
+A scrollable "Mind Map" (or detailed interactive canvas) fades into the center of the screen, displaying the specific modules and details of the clicked specialty.
+[UI Instruction: Mobile Layout]Disable the diamond animation. Display a clean, scrollable vertical accordion list. When a specialty is tapped, it expands to show the mind map/module descriptions.
+[[Specialty Content Template (Appears inside the Mind Map)]]
+(A file will be attached degtailing all specilities!)
+[Contact & Contribute Page]
+[[Title]] Get in Touch & Contribute
+[[Sub-title]] Help us grow the NHSM vault or reach out to the team.
+[[Contribution Form]]Text: "Have a better TD solution? Found an amazing YouTube playlist? Add it to the tree!"Fields:Select Year (Dropdown)Select Semester (Dropdown)Select Module (Dropdown)Select Material Type (Lectures, Worksheets, Labs, Projects, Exams, Resources)Upload File / Paste LinkSubmit Button[[Contact Form]]Text: "Found a bug? Want to join the team? Message us below."
+Fields:
+Name
+Email
+Subject
+Message
+Send Button
+
+
+[Hidden Admin Dashboard]
+
+[Backend Instruction: Authentication]
+Create a hidden route (e.g., /nhsm-vault-admin). Protect this route using email/password authentication (e.g., via Firebase Auth or Supabase). Only authorized admin emails can access this page.
+
+[UI Instruction: Admin Layout]
+A clean dashboard with a side navigation menu containing 4 tabs: "Inbox", "Resources Tree", "Content Manager", and "Specialties".
+
+[[Tab 1: Inbox (Notifications)]]
+
+Contact Messages: A table displaying messages from the "Contact Form" (Name, Email, Subject, Message, Date).
+
+Contributions: A table displaying user submissions from the "Contribution Form". Admins can click a generated link to view the submitted file/URL, and manually add it to the Tree.
+
+[[Tab 2: Resources Tree Manager]]
+
+CRUD Interface (Create, Read, Update, Delete):
+
+Ability to add/delete a Year, Semester, or Module node.
+
+Ability to upload new PDFs or paste new URLs into specific categories (Lectures, TD, TP, etc.) within a module.
+
+[[Tab 3: Content Manager (About NHSM)]]
+
+Text Editor: Simple text fields to update the website's static copy.
+
+Edit "What is NHSM" description.
+
+Add/Remove/Edit Clubs (Title, Description).
+
+Update Residency and Campus Information.
+
+[[Tab 4: Specialties Manager]]
+
+Specialty Editor:
+
+Update the titles and descriptions of the 4 main diamond specialties.
+
+Add/Remove nodes from the detailed "Mind Map" for each specialty (e.g., changing the syllabus or project examples).
