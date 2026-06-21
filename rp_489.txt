@@ -1,0 +1,76 @@
+Created At: 2026-06-20T19:56:04Z
+Completed At: 2026-06-20T19:56:04Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 1157
+Total Bytes: 51297
+Showing lines 50 to 150
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+50:   { id: 'tp', label: 'Labs' },
+51:   { id: 'projects', label: 'Projects' },
+52:   { id: 'exams', label: 'Exams' },
+53:   { id: 'resources', label: 'External Resources' },
+54: ];
+55: 
+56: const ALL_TYPES = RESOURCE_TYPES;
+57: const BASIC_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'exams', 'resources'].includes(t.id));
+58: const LAB_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'tp', 'exams', 'resources'].includes(t.id));
+59: const PROJ_TYPES = RESOURCE_TYPES;
+60: const LANG_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'exams'].includes(t.id));
+61: const HIST_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'resources'].includes(t.id));
+62: const LAB_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'tp', 'exams', 'resources'].includes(t.id));
+63: const PROJ_TYPES = RESOURCE_TYPES;
+64: 
+65: function makeModule(id: string, label: string, baseTypes: ResourceType[] = BASIC_TYPES, urls?: Record<string, string>): Module {
+66:   return { id, label, types: baseTypes.map(t => ({ ...t, url: urls ? urls[t.id] : undefined })) };
+67: };
+68: }
+69: 
+70: const YEAR_NODES: YearNode[] = [
+71:   {
+72:     id: 'y1', label: 'First Year', sublabel: 'Preparatory Class', type: 'trunk',
+73:     semesters: [
+74:       {
+75:         id: 'y1s1', label: 'Semester 1',
+76:         modules: [
+77:           makeModule('y1s1-mod1', 'Analysis 1', LAB_TYPES, {"lectures":"https://drive.google.com/drive/folders/17trYn2mgoiMjf-j_r3-UrmN7CoTAO5u7?usp=drive_link","td":"https://drive.google.com/drive/folders/1uCT4SWp5xJUWe9geMKoverFgwm
+<truncated 1832 bytes>
+J_TYPES),
+113:           makeModule('y2s3-mod6', 'Probability 2', BASIC_TYPES),
+114:           makeModule('y2s3-mod7', 'English 3', LANG_TYPES),
+115:         ],
+116:       },
+117:       {
+118:         id: 'y2s4', label: 'Semester 4',
+119:         modules: [
+120:           makeModule('y2s4-mod1', 'Analysis 4', BASIC_TYPES),
+121:           makeModule('y2s4-mod2', 'Measure & Integration', BASIC_TYPES),
+122:           makeModule('y2s4-mod3', 'Geometry 2', BASIC_TYPES),
+123:           makeModule('y2s4-mod4', 'Normed & Topological Vector Spaces', BASIC_TYPES),
+124:           makeModule('y2s4-mod5', 'Tools for Mathematical Programming', PROJ_TYPES),
+125:           makeModule('y2s4-mod6', 'Numerical Analysis 2', LAB_TYPES),
+126:           makeModule('y2s4-mod7', 'Geopolitics & Strategy', LANG_TYPES),
+127:           makeModule('y2s4-mod8', 'English 4', LANG_TYPES),
+128:         ],
+129:       },
+130:     ],
+131:   },
+132:   {
+133:     id: 'y3', label: 'Third Year', sublabel: 'Common Core', type: 'split',
+134:     semesters: [
+135:       {
+136:         id: 'y3s5', label: 'Semester 1',
+137:         modules: [
+138:           makeModule('y3s5-mod1', 'Partial Differential Equations', LAB_TYPES),
+139:           makeModule('y3s5-mod2', 'Ordinary Differential Equations', BASIC_TYPES),
+140:           makeModule('y3s5-mod3', 'Functional Analysis', BASIC_TYPES),
+141:           makeModule('y3s5-mod4', 'Complex Analysis', BASIC_TYPES),
+142:           makeModule('y3s5-mod5', 'Object-Oriented Programming', PROJ_TYPES),
+143:           makeModule('y3s5-mod6', 'Stochastic Processes', BASIC_TYPES),
+144:           makeModule('y3s5-mod7', 'Inferential Statistics', BASIC_TYPES),
+145:           makeModule('y3s5-mod8', 'Algebra & Coding', BASIC_TYPES),
+146:         ],
+147:       },
+148:       {
+149:         id: 'y3s6', label: 'Semester 2',
+150:         modules: [
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

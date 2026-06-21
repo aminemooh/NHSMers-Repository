@@ -1,0 +1,95 @@
+Created At: 2026-06-20T20:29:24Z
+Completed At: 2026-06-20T20:29:24Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/view_1_800.txt`
+Total Lines: 108
+Total Bytes: 4121
+Showing lines 1 to 108
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: Created At: 2026-06-18T19:25:56Z
+2: Completed At: 2026-06-18T19:25:56Z
+3: File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+4: Total Lines: 884
+5: Total Bytes: 32723
+6: Showing lines 1 to 800
+7: The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+8: 1: 'use client';
+9: 2: 
+10: 3: import { useState, useEffect } from 'react';
+11: 4: 
+12: 5: // ============================================================
+13: 6: // DATA
+14: 7: // ============================================================
+15: 8: 
+16: 9: interface ResourceType {
+17: 10:   id: string;
+18: 11:   label: string;
+19: 12:   icon: string;
+20: 13: }
+21: 14: 
+22: 15: interface Module {
+23: 16:   id: string;
+24: 17:   label: string;
+25: 18:   types: ResourceType[];
+26: 19: }
+27: 20: 
+28: 21: interface Semester {
+29: 22:   id: string;
+30: 23:   label: string;
+31: 24:   modules: Module[];
+32: 25: }
+33: 26: 
+34: 27: interface YearNode {
+35: 28:   id: string;
+36: 29:   label: string;
+37: 30:   sublabel: string;
+38: 31:   type: 'trunk' | 'split';
+39: 32:   svgX: number;
+40: 33:   svgY: number;
+41: 34:   semesters: Semester[];
+42: 35: }
+43: 36: 
+44: 37: interface SpecialtyNode {
+45: 38:   id: string;
+46: 39:   label: string;
+47: 40:   abbr: string;
+48: 41:   color: string;
+49: 42:   svgX: number;
+50: 43:   svgY: number;
+51: 44:   semesters: 
+<truncated 1016 bytes>
+dSpecialtyId(null);
+75: 769:     window.history.pushState({}, '', '/resources');
+76: 770:   };
+77: 771: 
+78: 772:   return (
+79: 773:     <div className="pb-16">
+80: 774:       {/* ── Page Header ───────────────────────────────────── */}
+81: 775:       <div className="text-center pt-8 pb-10 animate-fade-in-up">
+82: 776:         <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+83: 777:           The{' '}
+84: 778:           <span
+85: 779:             style={{
+86: 780:               background: 'linear-gradient(135deg, #00d4ff, #10b981)',
+87: 781:               WebkitBackgroundClip: 'text',
+88: 782:               WebkitTextFillColor: 'transparent',
+89: 783:               backgroundClip: 'text',
+90: 784:             }}
+91: 785:           >
+92: 786:             Knowledge Vault
+93: 787:           </span>
+94: 788:         </h1>
+95: 789:         <p className="text-gray-400 text-base max-w-xl mx-auto leading-relaxed">
+96: 790:           Navigate the full NHSM academic tree. Click any node to explore its resources — lectures, worksheets, exams, and more.
+97: 791:         </p>
+98: 792:       </div>
+99: 793: 
+100: 794:       {/* ── Legend ────────────────────────────────────────── */}
+101: 795:       <div className="flex flex-wrap justify-center gap-4 mb-8 animate-fade-in">
+102: 796:         <div className="flex items-center gap-2 text-xs text-gray-500">
+103: 797:           <div className="w-3 h-3 rounded-full bg-white/30" />
+104: 798:           <span>Common Core (Years 1–3)</span>
+105: 799:         </div>
+106: 800:         {SPECIALTY_NODES.map((sp) => (
+107: The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+108: 
+The above content shows the entire, complete file contents of the requested file.

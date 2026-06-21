@@ -1,0 +1,89 @@
+Created At: 2026-06-18T19:50:45Z
+Completed At: 2026-06-18T19:50:45Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 907
+Total Bytes: 34324
+Showing lines 320 to 400
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+320:           makeModule('ccs-s9-mod2', 'Advanced Cryptography', PROJ_TYPES),
+321:           makeModule('ccs-s9-mod3', 'System Security', LAB_TYPES),
+322:           makeModule('ccs-s9-mod4', 'Network Security', LAB_TYPES),
+323:           makeModule('ccs-s9-mod5', 'Dynamical Systems & Chaos'),
+324:           makeModule('ccs-s9-mod6', 'Elliptic Curves'),
+325:           makeModule('ccs-s9-mod7', 'Audio, Images & Security', PROJ_TYPES),
+326:         ],
+327:       },
+328:     ],
+329:   },
+330:   {
+331:     id: 'mp',
+332:     label: 'Mathematical Physics',
+333:     abbr: 'MP',
+334:     color: '#f59e0b',
+335:     svgX: 613,
+336:     svgY: 415,
+337:     semesters: [
+338:       {
+339:         id: 'mp-s7',
+340:         label: 'Fourth Year - Semester 1',
+341:         modules: [
+342:           makeModule('mp-s7-fluid', 'Fluid Mechanics', LAB_TYPES),
+343:           makeModule('mp-s7-thermo', 'Thermodynamics', LAB_TYPES),
+344:           makeModule('mp-s7-statphys', 'Statistical Physics'),
+345:           makeModule('mp-s7-quantum', 'Quantum Mechanics'),
+346:         ],
+347:       },
+348:       {
+349:         id: 'mp-s8',
+350:         label: 'Fourth Year - Semester 2',
+351:         modules: [
+352:           makeModule('mp-s8-quantinfo', 'Quantum Information'),
+353:           makeModule('mp-s8-advquantum', 'Advanced Quantum Mechanics'),
+354:           makeModule('mp-s8-geophys', 'Geophysical Methods', LAB_TYPES),
+355:           makeModule('mp-s8-mathphys', 'Mathematical Physics Methods'),
+356:         ],
+357:       },
+358:       {
+359:         id: 'mp-s9',
+360:         label: 'Fifth Year - Semester 1',
+361:         modules: [
+362:           makeModule('mp-s9-quantcomp', 'Advanced Quantum Computing', PROJ_TYPES),
+363:           makeModule('mp-s9-geophysapp', 'Geophysics Applications', PROJ_TYPES),
+364:           makeModule('mp-s9-seminar', 'Mathematical Physics Seminar', PROJ_TYPES),
+365:           makeModule('mp-s9-research', 'Research Project', PROJ_TYPES),
+366:         ],
+367:       },
+368:     ],
+369:   },
+370: ];
+371: 
+372: // ============================================================
+373: // TREE SVG
+374: // ============================================================
+375: 
+376: const SVG_W = 700;
+377: const SVG_H = 500;
+378: const TRUNK_COLOR = 'rgba(255,255,255,0.35)';
+379: 
+380: interface TreeSVGProps {
+381:   selectedYearId: string | null;
+382:   selectedSpecialtyId: string | null;
+383:   onYearClick: (id: string) => void;
+384:   onSpecialtyClick: (id: string) => void;
+385: }
+386: 
+387: function KnowledgeTreeSVG({ selectedYearId, selectedSpecialtyId, onYearClick, onSpecialtyClick }: TreeSVGProps) {
+388:   return (
+389:     <svg
+390:       viewBox={`0 0 ${SVG_W} ${SVG_H}`}
+391:       className="w-full"
+392:       style={{ maxHeight: 420, overflow: 'visible' }}
+393:     >
+394:       <defs>
+395:         <filter id="glow-white" x="-50%" y="-50%" width="200%" height="200%">
+396:           <feGaussianBlur stdDeviation="4" result="blur" />
+397:           <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+398:         </filter>
+399:         {SPECIALTY_NODES.map((sp) => (
+400:           <filter key={sp.id} id={`glow-${sp.id}`} x="-100%" y="-100%" width="300%" height="300%">
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

@@ -1,0 +1,68 @@
+Created At: 2026-06-20T20:43:57Z
+Completed At: 2026-06-20T20:43:57Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/rp_489.txt`
+Total Lines: 77
+Total Bytes: 4120
+Showing lines 1 to 77
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: Created At: 2026-06-20T19:56:04Z
+2: Completed At: 2026-06-20T19:56:04Z
+3: File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+4: Total Lines: 1157
+5: Total Bytes: 51297
+6: Showing lines 50 to 150
+7: The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+8: 50:   { id: 'tp', label: 'Labs' },
+9: 51:   { id: 'projects', label: 'Projects' },
+10: 52:   { id: 'exams', label: 'Exams' },
+11: 53:   { id: 'resources', label: 'External Resources' },
+12: 54: ];
+13: 55: 
+14: 56: const ALL_TYPES = RESOURCE_TYPES;
+15: 57: const BASIC_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'exams', 'resources'].includes(t.id));
+16: 58: const LAB_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'tp', 'exams', 'resources'].includes(t.id));
+17: 59: const PROJ_TYPES = RESOURCE_TYPES;
+18: 60: const LANG_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'exams'].includes(t.id));
+19: 61: const HIST_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'resources'].includes(t.id));
+20: 62: const LAB_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'tp', 'exams', 'resources'].includes(t.id));
+21: 63: const PROJ_TYPES = RESOURCE_TYPES;
+22: 64: 
+23: 65: function makeModule(id: string, label: string, baseTypes: ResourceType[] = BASIC_TYPES, urls?: Record<string, string>): Module {
+24: 66:   return { id, label, types:
+<truncated 876 bytes>
+ 'Semester 4',
+44: 119:         modules: [
+45: 120:           makeModule('y2s4-mod1', 'Analysis 4', BASIC_TYPES),
+46: 121:           makeModule('y2s4-mod2', 'Measure & Integration', BASIC_TYPES),
+47: 122:           makeModule('y2s4-mod3', 'Geometry 2', BASIC_TYPES),
+48: 123:           makeModule('y2s4-mod4', 'Normed & Topological Vector Spaces', BASIC_TYPES),
+49: 124:           makeModule('y2s4-mod5', 'Tools for Mathematical Programming', PROJ_TYPES),
+50: 125:           makeModule('y2s4-mod6', 'Numerical Analysis 2', LAB_TYPES),
+51: 126:           makeModule('y2s4-mod7', 'Geopolitics & Strategy', LANG_TYPES),
+52: 127:           makeModule('y2s4-mod8', 'English 4', LANG_TYPES),
+53: 128:         ],
+54: 129:       },
+55: 130:     ],
+56: 131:   },
+57: 132:   {
+58: 133:     id: 'y3', label: 'Third Year', sublabel: 'Common Core', type: 'split',
+59: 134:     semesters: [
+60: 135:       {
+61: 136:         id: 'y3s5', label: 'Semester 1',
+62: 137:         modules: [
+63: 138:           makeModule('y3s5-mod1', 'Partial Differential Equations', LAB_TYPES),
+64: 139:           makeModule('y3s5-mod2', 'Ordinary Differential Equations', BASIC_TYPES),
+65: 140:           makeModule('y3s5-mod3', 'Functional Analysis', BASIC_TYPES),
+66: 141:           makeModule('y3s5-mod4', 'Complex Analysis', BASIC_TYPES),
+67: 142:           makeModule('y3s5-mod5', 'Object-Oriented Programming', PROJ_TYPES),
+68: 143:           makeModule('y3s5-mod6', 'Stochastic Processes', BASIC_TYPES),
+69: 144:           makeModule('y3s5-mod7', 'Inferential Statistics', BASIC_TYPES),
+70: 145:           makeModule('y3s5-mod8', 'Algebra & Coding', BASIC_TYPES),
+71: 146:         ],
+72: 147:       },
+73: 148:       {
+74: 149:         id: 'y3s6', label: 'Semester 2',
+75: 150:         modules: [
+76: The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+77: 
+The above content shows the entire, complete file contents of the requested file.

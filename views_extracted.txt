@@ -1,0 +1,418 @@
+Created At: 2026-06-20T19:51:34Z
+Completed At: 2026-06-20T19:51:34Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 1135
+Total Bytes: 48992
+Showing lines 1 to 100
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: 'use client';
+2: 
+3: import { useState, useRef, useEffect } from 'react';
+4: 
+5: // ============================================================
+6: // INTERFACES
+7: // ============================================================
+8: 
+9: interface ResourceType {
+10:   id: string;
+11:   label: string;
+12: }
+13: 
+14: interface Module {
+15:   id: string;
+16:   label: string;
+17:   types: ResourceType[];
+18: }
+19: 
+20: interface Semester {
+21:   id: string;
+22:   label: string;
+23:   modules: Module[];
+24: }
+25: 
+26: interface YearNode {
+27:   id: string;
+28:   label: string;
+29:   sublabel: string;
+30:   type: 'trunk' | 'split';
+31:   semesters: Semester[];
+32: }
+33: 
+34: interface SpecialtyNode {
+35:   id: string;
+36:   label: string;
+37:   abbr: string;
+38:   color: string;
+39:   semesters: Semester[];
+40: }
+41: 
+42: // ============================================================
+43: // DATA
+44: // ============================================================
+45: 
+46: const RESOURCE_TYPES: ResourceType[] = [
+47:   { id: 'lectures', label: 'Lectures' },
+48:   { id: 'td', label: 'Worksheets' },
+49:   { id: 'tp', label: 'Labs' },
+50:   { id: 'projects', label: 'Projects' },
+51:   { id: 'exams', label: 'Exams' },
+52:   { id: 'resources', label: 'Resources' },
+53: ];
+54: 
+55: const ALL_TYPES = RESOURCE_TYPES;
+56: const BASIC_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'exams'].includes(t.id));
+57: const LAB_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'tp', 'exams', 'resources'].includes(t.id));
+58: const PROJ_TYPES = RESOURCE_TYPES;
+59: 
+60: function makeModule(id: string, label: string, types: ResourceType[] = BASIC_TYPES): Module {
+61:   return { id, label, types };
+62: }
+63: 
+64: const YEAR_NODES: YearNode[] = [
+65:   {
+66:     id: 'y1', label: 'First Year', sublabel: 'Preparatory Class', type: 'trunk',
+67:     semesters: [
+68:       {
+69:         id: 'y1s1', label: 'Semester 1',
+70:         modules: [
+71:           makeModule('y1s1-mod1', 'Analysis 1', LAB_TYPES),
+72:           makeModule('y1s1-mod2', 'Descriptive Statistics & Intro to Probability'),
+73:           makeModule('y1s1-mod3', 'Algebra 1'),
+74:           makeModule('y1s1-mod4', 'Discrete Mathematics 1'),
+75:           makeModule('y1s1-mod5', 'Algorithms & Data Structures 1', PROJ_TYPES),
+76:           makeModule('y1s1-mod6', 'Physics 1', LAB_TYPES),
+77:           makeModule('y1s1-mod7', 'History of Mathematics'),
+78:           makeModule('y1s1-mod8', 'English 1'),
+79:         ],
+80:       },
+81:       {
+82:         id: 'y1s2', label: 'Semester 2',
+83:         modules: [
+84:           makeModule('y1s2-mod1', 'Analysis 2'),
+85:           makeModule('y1s2-mod2', 'Probability 1'),
+86:           makeModule('y1s2-mod3', 'Algebra 2'),
+87:           makeModule('y1s2-mod4', 'Discrete Mathematics 2'),
+88:           makeModule('y1s2-mod5', 'Algorithms & Data Structures 2', PROJ_TYPES),
+89:           makeModule('y1s2-mod6', 'Physics 2', LAB_TYPES),
+90:           makeModule('y1s2-mod7', 'Mathematical Logic'),
+91:           makeModule('y1s2-mod8', 'English 2'),
+92:         ],
+93:       },
+94:     ],
+95:   },
+96:   {
+97:     id: 'y2', label: 'Second Year', sublabel: 'Preparatory Class', type: 'trunk',
+98:     semesters: [
+99:       {
+100:         id: 'y2s3', label: 'Semester 3',
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+---
+Created At: 2026-06-20T19:51:38Z
+Completed At: 2026-06-20T19:51:39Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 1135
+Total Bytes: 48992
+Showing lines 800 to 1000
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+800:       setHint('Click a module');
+801:     } else if (activeSem) {
+802:       setActiveSem(null); setActiveMod(null); setResNodes([]); setModNodes([]);
+803:       const pos = activeTrack && activeYear
+804:         ? getBranchYearPos(activeTrack, BRANCH_YEAR_FRACS[activeYear - 4])
+805:         : (activeYear ? { x: CX, y: TRUNK_YEAR_Y[activeYear - 1] } : { x: CX, y: CX });
+806:       // Return to semester circle view
+807:       zoomTo(pos.x, pos.y, 2.8);
+808:       setHint('Click a semester');
+809:     } else if (activeYear && activeTrack) {
+810:       setActiveYear(null); setActiveSem(null); setModNodes([]); setResNodes([]); setSemNodes([]);
+811:       setLitSegs(new Set());
+812:       zoomTo(SPEC_X[activeTrack] ?? CX, 350, 1.3);
+813:       setHint('Click Y4 or Y5 on the branch');
+814:     } else if (activeYear && !activeTrack) {
+815:       setActiveYear(null); setActiveSem(null); setModNodes([]); setResNodes([]); setSemNodes([]);
+816:       setLitSegs(new Set());
+817:       homeZoom();
+818:       setHint('Click a year or a specialty to explore');
+819:     } else if (revealedTrack) {
+820:       resetAll();
+821:     } else {
+822:       resetAll();
+823:     }
+824:   }
+825: 
+826:   const canGoBack = !!(activeYear || revealedTrack || activeSem || activeMod);
+827: 
+828:   // ─── DERIVED STATE ───────────────────────────────────────────────────────────
+829:   const segLit = (key: string) => litSegs.has(key);
+83
+<truncated 8792 bytes>
+d);
+978:               // Skip Y5 node if track has no Y5 semesters
+979:               if (year === 5 && track && track.semesters.length <= 2) return null;
+980:               const pos = getBranchYearPos(tid, BRANCH_YEAR_FRACS[i]);
+981:               const isActiveYear = activeYear === year;
+982:               const lit = branchNodeLit[i];
+983:               // If a year is active, the active one stays visible (or dims to 0.15 if deep), others dim.
+984:               // If NO year is active yet (just revealed), both Y4 and Y5 are fully visible (1).
+985:               const focusOpacity = activeYear ? (isActiveYear ? (activeSem ? 0.15 : 1) : DIM) : 1;
+986:               const isTextDimmed = !!activeYear;
+987:               const color = track?.color || '#2DD4BF';
+988:               return (
+989:                 <g key={year} className="nc"
+990:                   onClick={() => activateYear(tid, year)}
+991:                   style={{ opacity: focusOpacity, transition: 'opacity 0.4s' }}>
+992:                   {(lit || isActiveYear) && <circle cx={pos.x} cy={pos.y} r="20" fill={color} opacity="0.15" />}
+993:                   <circle cx={pos.x} cy={pos.y} r="11"
+994:                     fill={isActiveYear ? color : lit ? 'var(--bg-card)' : 'var(--bg-main)'}
+995:                     stroke={color}
+996:                     strokeWidth={isActiveYear ? 2 : 1.5}
+997:                     style={{ transition: 'fill 0.4s' }} />
+998:                   <text x={pos.x} y={pos.y + (isTextDimmed ? 22 : 24)} fontSize={isTextDimmed ? "9" : "12"}
+999:                     fill={isTextDimmed ? (isActiveYear ? color : lit ? color : 'var(--text-muted)') : (isActiveYear ? color : lit ? color : 'var(--text-main)')}
+1000:                     textAnchor="middle" style={{ transition: 'fill 0.4s, font-size 0.4s', fontWeight: isTextDimmed ? 'normal' : 600 }}>
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+---
+Created At: 2026-06-20T19:51:44Z
+Completed At: 2026-06-20T19:51:44Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 1135
+Total Bytes: 48992
+Showing lines 1000 to 1135
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1000:                     textAnchor="middle" style={{ transition: 'fill 0.4s, font-size 0.4s', fontWeight: isTextDimmed ? 'normal' : 600 }}>
+1001:                     Y{year}
+1002:                   </text>
+1003:                 </g>
+1004:               );
+1005:             })}
+1006: 
+1007:             {/* ── SEMESTER NODES ── */}
+1008:             {semNodes.map(n => {
+1009:               const isActive = activeSem === n.id;
+1010:               const track = activeTrack ? SPECIALTY_NODES.find(s => s.id === activeTrack) : null;
+1011:               const tcolor = track ? track.color : '#2DD4BF';
+1012:               const yearPos = (activeTrack && activeYear)
+1013:                 ? getBranchYearPos(activeTrack, BRANCH_YEAR_FRACS[activeYear - 4])
+1014:                 : (activeYear ? { x: CX, y: TRUNK_YEAR_Y[activeYear - 1] } : { x: CX, y: CX });
+1015:               // Dim heavily if another sem is selected; completely hide if a mod is open on non-active sem
+1016:               // If THIS sem is active, but a module is open, dim it to 15% so it gets out of the way
+1017:               const isSomethingElseActive = !!activeSem && !isActive;
+1018:               const hiddenByMod = !!activeMod && !isActive;
+1019:               const opacity = !n.visible ? 0 : hiddenByMod ? 0 : isSomethingElseActive ? DIM : (activeMod ? 0.15 : 1);
+1020:               const scale = !n.visible ? 0 : hiddenByMod ? 0 : isSomethingElseActive ? 0.5 : 1;
+1021:               const isLeft = n.x < yearPos.x + 1;
+1022:               return (
+1023:        
+<truncated 4386 bytes>
+${tcolor}90`} strokeWidth="1"
+1095:                     style={{ transition: 'fill 0.3s' }} />
+1096:                   <text x={n.x} y={n.y + (above ? -12 : 16)} fontSize="7.5"
+1097:                     fill={isActive ? tcolor : 'var(--text-main)'} textAnchor="middle">{n.label}</text>
+1098:                 </g>
+1099:               );
+1100:             })}
+1101: 
+1102:             {/* ── TITLE ── */}
+1103:             <text x="20" y="26" fontSize="9" fill="#2DD4BF" letterSpacing="2">NHSM · TREE OF KNOWLEDGE</text>
+1104:           </svg>
+1105:         </div>{/* end inner (transformable) */}
+1106: 
+1107:         {/* Hint text */}
+1108:         <div style={{
+1109:           position: 'fixed', bottom: 14, left: '50%', transform: 'translateX(-50%)',
+1110:           fontSize: 8, letterSpacing: '0.2em', color: 'var(--text-muted)',
+1111:           textTransform: 'uppercase', pointerEvents: 'none', whiteSpace: 'nowrap', zIndex: 50
+1112:         }}>
+1113:           {hint}
+1114:         </div>
+1115: 
+1116:         {/* Back button — fixed so it stays visible even when zoomed */}
+1117:         {canGoBack && (
+1118:           <button onClick={resetAll}
+1119:             style={{
+1120:               position: 'fixed', bottom: 40, left: 16, zIndex: 200,
+1121:               width: 34, height: 34, background: 'var(--bg-overlay)',
+1122:               border: '1px solid rgba(45,212,191,0.25)', borderRadius: 5,
+1123:               color: '#2DD4BF', fontSize: 18, cursor: 'pointer',
+1124:               display: 'flex', alignItems: 'center', justifyContent: 'center',
+1125:               fontFamily: 'inherit', userSelect: 'none', transition: 'border-color 0.2s',
+1126:               paddingBottom: 2
+1127:             }}>
+1128:             ⌂
+1129:           </button>
+1130:         )}
+1131:       </div>
+1132:     </div>
+1133:   );
+1134: }
+1135: 
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+---
+Created At: 2026-06-20T19:52:06Z
+Completed At: 2026-06-20T19:52:07Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 1135
+Total Bytes: 48992
+Showing lines 600 to 800
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+600:     const s = Math.min((W - 60) / contentW, (H - 60) / contentH);
+601:     applyZoom({ scale: s, tx: W / 2 - contentCX * s, ty: H / 2 - contentCY * s }, true);
+602:   }
+603: 
+604:   // ── bloom helpers ──
+605:   function bloomNodes(
+606:     cx: number, cy: number,
+607:     items: { id: string; label: string }[],
+608:     radius: number,
+609:     setter: React.Dispatch<React.SetStateAction<AnimNode[]>>,
+610:     delay = 50
+611:   ) {
+612:     const positions = bloomPositions(cx, cy, items.length, radius);
+613:     const nodes: AnimNode[] = items.map((item, i) => ({
+614:       id: item.id, label: item.label,
+615:       x: positions[i].x, y: positions[i].y,
+616:       cx, cy, visible: false
+617:     }));
+618:     setter(nodes);
+619:     nodes.forEach((_, i) => setTimeout(() =>
+620:       setter(prev => prev.map((p, pi) => pi === i ? { ...p, visible: true } : p)), i * delay + 80));
+621:   }
+622: 
+623:   function bloomSemNodes(cx: number, cy: number, semesters: Semester[], setter: React.Dispatch<React.SetStateAction<AnimNode[]>>) {
+624:     // For 1 sem: place above. For 2: left & right (original preferred layout).
+625:     // For 3+: evenly spaced circle.
+626:     let positions: { x: number; y: number }[];
+627:     const SEM_LR = 95; // horizontal offset for left/right layout
+628:     if (semesters.length === 1) {
+629:       positions = [{ x: cx, y: cy - 90 }];
+630:     } else if (semesters.length === 2) {
+631:       positions = [{ x: cx - SEM_LR, y: cy }, { x: cx + SEM_LR, y: cy }];
+632:     } else {
+633:       position
+<truncated 5412 bytes>
+:     const types = mod?.types || [];
+760:     bloomNodes(mx, my, types.map(t => ({ id: t.id, label: t.label })), MIN_RES_RADIUS, setResNodes, 40);
+761:     
+762:     // Zoom exactly to the clamped center of the resource circle
+763:     const { bcx, bcy } = getBloomCenter(mx, my, types.length, MIN_RES_RADIUS);
+764:     zoomTo(bcx, bcy, 4.0);
+765:     
+766:     setHint('Exploring · ' + (mod?.label.substring(0, 28) || ''));
+767:   }
+768: 
+769:   function activateRes(resId: string) {
+770:     setActiveRes(prev => prev === resId ? null : resId);
+771:     // Link navigation will go here once links file is provided
+772:   }
+773: 
+774:   function resetAll() {
+775:     setActiveTrack(null); setRevealedTrack(null); setLitSegs(new Set());
+776:     setActiveYear(null); setActiveSem(null); setActiveMod(null); setActiveRes(null);
+777:     setSemNodes([]); setModNodes([]); setResNodes([]);
+778:     homeZoom();
+779:     setHint('Click a year or a specialty to explore');
+780:   }
+781: 
+782:   function goBack() {
+783:     if (activeMod) {
+784:       setActiveMod(null); setActiveRes(null); setResNodes([]);
+785:       const sn = semNodes.find(n => n.id === activeSem);
+786:       if (sn) {
+787:         let count = 8; // fallback count
+788:         if (activeTrack) {
+789:           const track = SPECIALTY_NODES.find(s => s.id === activeTrack);
+790:           const sem = track?.semesters.find(s => s.id === sn.id);
+791:           count = sem?.modules.length || 8;
+792:         } else if (activeYear) {
+793:           const yr = YEAR_NODES[activeYear - 1];
+794:           const sem = yr?.semesters.find(s => s.id === sn.id);
+795:           count = sem?.modules.length || 8;
+796:         }
+797:         const { bcx, bcy } = getBloomCenter(sn.x, sn.y, count, MIN_MOD_RADIUS);
+798:         zoomTo(bcx, bcy, 3.4);
+799:       }
+800:       setHint('Click a module');
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+---
+Created At: 2026-06-20T19:56:04Z
+Completed At: 2026-06-20T19:56:04Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 1157
+Total Bytes: 51297
+Showing lines 50 to 150
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+50:   { id: 'tp', label: 'Labs' },
+51:   { id: 'projects', label: 'Projects' },
+52:   { id: 'exams', label: 'Exams' },
+53:   { id: 'resources', label: 'External Resources' },
+54: ];
+55: 
+56: const ALL_TYPES = RESOURCE_TYPES;
+57: const BASIC_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'exams', 'resources'].includes(t.id));
+58: const LAB_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'tp', 'exams', 'resources'].includes(t.id));
+59: const PROJ_TYPES = RESOURCE_TYPES;
+60: const LANG_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'exams'].includes(t.id));
+61: const HIST_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'resources'].includes(t.id));
+62: const LAB_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'tp', 'exams', 'resources'].includes(t.id));
+63: const PROJ_TYPES = RESOURCE_TYPES;
+64: 
+65: function makeModule(id: string, label: string, baseTypes: ResourceType[] = BASIC_TYPES, urls?: Record<string, string>): Module {
+66:   return { id, label, types: baseTypes.map(t => ({ ...t, url: urls ? urls[t.id] : undefined })) };
+67: };
+68: }
+69: 
+70: const YEAR_NODES: YearNode[] = [
+71:   {
+72:     id: 'y1', label: 'First Year', sublabel: 'Preparatory Class', type: 'trunk',
+73:     semesters: [
+74:       {
+75:         id: 'y1s1', label: 'Semester 1',
+76:         modules: [
+77:           makeModule('y1s1-mod1', 'Analysis 1', LAB_TYPES, {"lectures":"https://drive.google.com/drive/folders/17trYn2mgoiMjf-j_r3-UrmN7CoTAO5u7?usp=drive_link","td":"https://drive.google.com/drive/folders/1uCT4SWp5xJUWe9geMKoverFgwm
+<truncated 1832 bytes>
+J_TYPES),
+113:           makeModule('y2s3-mod6', 'Probability 2', BASIC_TYPES),
+114:           makeModule('y2s3-mod7', 'English 3', LANG_TYPES),
+115:         ],
+116:       },
+117:       {
+118:         id: 'y2s4', label: 'Semester 4',
+119:         modules: [
+120:           makeModule('y2s4-mod1', 'Analysis 4', BASIC_TYPES),
+121:           makeModule('y2s4-mod2', 'Measure & Integration', BASIC_TYPES),
+122:           makeModule('y2s4-mod3', 'Geometry 2', BASIC_TYPES),
+123:           makeModule('y2s4-mod4', 'Normed & Topological Vector Spaces', BASIC_TYPES),
+124:           makeModule('y2s4-mod5', 'Tools for Mathematical Programming', PROJ_TYPES),
+125:           makeModule('y2s4-mod6', 'Numerical Analysis 2', LAB_TYPES),
+126:           makeModule('y2s4-mod7', 'Geopolitics & Strategy', LANG_TYPES),
+127:           makeModule('y2s4-mod8', 'English 4', LANG_TYPES),
+128:         ],
+129:       },
+130:     ],
+131:   },
+132:   {
+133:     id: 'y3', label: 'Third Year', sublabel: 'Common Core', type: 'split',
+134:     semesters: [
+135:       {
+136:         id: 'y3s5', label: 'Semester 1',
+137:         modules: [
+138:           makeModule('y3s5-mod1', 'Partial Differential Equations', LAB_TYPES),
+139:           makeModule('y3s5-mod2', 'Ordinary Differential Equations', BASIC_TYPES),
+140:           makeModule('y3s5-mod3', 'Functional Analysis', BASIC_TYPES),
+141:           makeModule('y3s5-mod4', 'Complex Analysis', BASIC_TYPES),
+142:           makeModule('y3s5-mod5', 'Object-Oriented Programming', PROJ_TYPES),
+143:           makeModule('y3s5-mod6', 'Stochastic Processes', BASIC_TYPES),
+144:           makeModule('y3s5-mod7', 'Inferential Statistics', BASIC_TYPES),
+145:           makeModule('y3s5-mod8', 'Algebra & Coding', BASIC_TYPES),
+146:         ],
+147:       },
+148:       {
+149:         id: 'y3s6', label: 'Semester 2',
+150:         modules: [
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+---

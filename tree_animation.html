@@ -1,0 +1,884 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NHSM · Tree of Knowledge</title>
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; background: #0B0F19; overflow: hidden; }
+    body { font-family: 'JetBrains Mono', 'Courier New', monospace; color: #E5E7EB; }
+    #root { width: 100%; height: 100vh; }
+
+    .hint {
+      position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+      font-size: 8px; letter-spacing: 0.2em; color: #1E3A4A;
+      text-transform: uppercase; pointer-events: none; z-index: 50;
+      white-space: nowrap;
+    }
+    .node-click { cursor: pointer; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+
+<script id="app-source" type="text/plain">
+const { useState, useRef, useCallback, useEffect } = React;
+
+/* ─── CURRICULUM DATA ──────────────────────────────────────────────────── */
+const COMMON_CORE = {
+  1: {
+    S1: ["Calculus 1","Linear Algebra 1","General Physics 1","Algorithmics 1","Intro to Programming","French/English","Sport","—"],
+    S2: ["Calculus 2","Linear Algebra 2","General Physics 2","Algorithmics 2","Programming Project","Probability 1","Sport","—"]
+  },
+  2: {
+    S1: ["Analysis 1","Algebra 1","Mechanics","Algorithmics 3","Probability 2","Statistics 1","Technical English","—"],
+    S2: ["Analysis 2","Algebra 2","Electromagnetism","Data Structures","Numerical Methods 1","Statistics 2","Career Seminar","—"]
+  },
+  3: {
+    S1: ["Partial Differential Eqs","Ordinary Differential Eqs","Functional Analysis","Stochastic Processes","Inferential Statistics","Complex Analysis","Object-Oriented Prog.","Algebra & Coding"],
+    S2: ["Numerical Analysis of DEs","Integral Transformation","Regression Models","Continuous Optimization","Data Mining","Differential Geometry","Field Extensions","Artificial Intelligence"]
+  }
+};
+
+const TRACKS = {
+  MS: {
+    name: "Modeling & Simulation",
+    years: {
+      4: {
+        S1: ["Intro Modeling Cont. Env.","Control of Diff. Equations","Digital Image Processing","Matrix Numerical Analysis","Distributions & Applications","Stochastic Simulations","Modeling Workshop","—"],
+        S2: ["Non-Variational Methods","Stochastic Diff. Equations","Intro Biological Modeling","Fluid Mechanics","Artificial Vision","Fractional Diff. Equations","Convex Optimization","Intro to Business"]
+      },
+      5: {
+        S1: ["Image Processing","Numerical Fluid Mechanics","Intro Epidemiol. Modeling","Bayesian Inference","Modeling Workshop 2","—","—","—"],
+        S2: null
+      }
+    }
+  },
+  SESA: {
+    name: "Statistics & Actuarial Sci.",
+    years: {
+      4: {
+        S1: ["Stochastic Processes","Time Series 1","Data Mining 2","Adv. Optimization & Graphs","Info Systems & Databases","Stochastic Simulation","Intro to Finance","—"],
+        S2: ["Non-Parametric Estimation","Time Series 2","Stochastic Diff. Calculus","Extreme Value Statistics","Actuarial Science 1","Optimization Econ & Finance","Insurance Law","Entrepreneurship"]
+      },
+      5: {
+        S1: ["Actuarial Science 2","Diffusion Models in Finance","Machine Learning","Intro Islamic Finance","Bayesian Inference","Modeling Workshop 2","Academic Communication","—"],
+        S2: null
+      }
+    }
+  },
+  CCS: {
+    name: "Cryptology, Coding & Sec.",
+    years: {
+      4: {
+        S1: ["Math Tools for Cryptography","Cryptography","Operating Systems","Complexity Theory","Formal Calculus","Combinatorial Optimization","Chipsets Programming","—"],
+        S2: ["Info Theory & Error Codes","Networks & Protocols","Signal Processing","Number Theory & Cryptography","Arithmetic Algorithms","Advanced Graph Theory","Random Number Generators","Entrepreneurship"]
+      },
+      5: {
+        S1: ["Cryptanalysis","Advanced Cryptography","System Security","Network Security","Dynamical Systems & Chaos","Elliptic Curves","Audio, Images & Security","—"],
+        S2: null
+      }
+    }
+  },
+  IMM: {
+    name: "Industrial Math. Modeling",
+    years: {
+      4: {
+        S1: ["Industrial Process Modeling","Operations Research","Discrete Event Simulation","Quality & Reliability","CAD/CAM Systems","Optimization Methods","Modeling Workshop","—"],
+        S2: ["Supply Chain Modeling","Scheduling Theory","Lean Six Sigma","Industrial Risk Analysis","Simulation Software","Convex Optimization","Project Management","Entrepreneurship"]
+      },
+      5: {
+        S1: ["Digital Twin Modeling","Maintenance Optimization","Industry 4.0 Systems","Decision Support Systems","Modeling Workshop 2","Academic Communication","—","—"],
+        S2: null
+      }
+    }
+  },
+  PHY: {
+    name: "Applied Physics",
+    years: {
+      4: {
+        S1: ["Quantum Mechanics","Thermodynamics & Stat. Phys.","Electrodynamics","Materials Science","Computational Physics","Optics & Photonics","Modeling Workshop","—"],
+        S2: ["Solid State Physics","Plasma Physics","Numerical Methods in Physics","Instrumentation & Sensors","Fluid Mechanics","Convex Optimization","Renewable Energy Systems","Entrepreneurship"]
+      },
+      5: {
+        S1: ["Nanophysics","Astrophysics","Physics of Semiconductors","Signal Acquisition","Modeling Workshop 2","Academic Communication","—","—"],
+        S2: null
+      }
+    }
+  }
+};
+
+const RESOURCES = ["Lectures","Worksheets","Exams","Videos","Notes","Practice"];
+
+/* ─── LAYOUT CONSTANTS ─────────────────────────────────────────────────── */
+const SVG_W = 900, SVG_H = 640;
+const CX = 450;
+const TRUNK_BOT = 590, TRUNK_TOP = 410;
+const TRUNK_YEAR_Y = [590, 500, 410]; // Y1..Y3
+const BRANCH_SPLIT_Y = TRUNK_YEAR_Y[2]; // 410
+const SPEC_X = { MS:150, SESA:280, CCS:450, IMM:620, PHY:750 };
+const BRANCH_YEAR_FRACS = [0.45, 0.92]; // Y4, Y5 fractions along branch bezier
+const BRANCH_CP_Y = 300;
+
+function bezierPt(t, x0,y0, cpx,cpy, x1,y1) {
+  const mt = 1-t;
+  return { x: mt*mt*x0+2*mt*t*cpx+t*t*x1, y: mt*mt*y0+2*mt*t*cpy+t*t*y1 };
+}
+function getBranchYearPos(specId, yearFrac) {
+  const sx = SPEC_X[specId], cpx = (CX+sx)/2;
+  return bezierPt(yearFrac, CX, BRANCH_SPLIT_Y, cpx, BRANCH_CP_Y, sx, 130);
+}
+
+/* ─── TRUNK TRACER (segment-by-segment glow) ────────────────────────────── */
+// Lights up the path piece-by-piece as a ball climbs from Year 1, stopping
+// exactly at the clicked year — it never travels past the target node.
+// target: { specId: null|trackId, year: 1..5 }. specId is null for the
+// common-core (trunk-only) years 1-3; required for branch years 4-5.
+// onSegLit(segKey) — called once per segment as ball reaches it.
+// segKey values: 'Y1', 'Y1-Y2', 'Y2', 'Y2-Y3', 'Y3', 'BR-Y4', 'Y4', 'BR-Y5', 'Y5'
+function runTracer(svgEl, target, onSegLit, onDone) {
+  const ns = 'http://www.w3.org/2000/svg';
+  const tracer = document.createElementNS(ns, 'circle');
+  tracer.setAttribute('r', '5');
+  tracer.setAttribute('fill', '#ffffff');
+  svgEl.appendChild(tracer);
+
+  const { specId, year } = target;
+  const trunkLen   = TRUNK_BOT - BRANCH_SPLIT_Y; // 180
+  const branchLen  = 340;
+  const usesBranch = year >= 4;
+  const sx  = usesBranch ? SPEC_X[specId] : null;
+  const cpx = usesBranch ? (CX + sx) / 2 : null;
+
+  // Distance traveled along the trunk to reach this target (full trunk if
+  // the target lives on a branch; otherwise up to that year's trunk node).
+  const trunkDist  = usesBranch ? trunkLen : (TRUNK_BOT - TRUNK_YEAR_Y[year - 1]);
+  // How far along the branch bezier curve this target sits (0 if no branch).
+  const branchFrac = usesBranch ? BRANCH_YEAR_FRACS[year - 4] : 0;
+  const branchDist = branchFrac * branchLen;
+  const totalDist  = trunkDist + branchDist;
+
+  const MS_PER_PX = 1400 / (trunkLen + branchLen); // keep original pacing
+  const DURATION  = Math.max(totalDist * MS_PER_PX, 320);
+
+  // Milestones only go up through the clicked year — nothing beyond it.
+  const milestones = [{ dist: 0, key: 'Y1' }];
+  if (year >= 2) {
+    milestones.push({ dist: (TRUNK_BOT-TRUNK_YEAR_Y[0]) + (TRUNK_YEAR_Y[0]-TRUNK_YEAR_Y[1])*0.5, key: 'Y1-Y2' });
+    milestones.push({ dist: TRUNK_BOT - TRUNK_YEAR_Y[1], key: 'Y2' });
+  }
+  if (year >= 3) {
+    milestones.push({ dist: (TRUNK_BOT-TRUNK_YEAR_Y[1]) + (TRUNK_YEAR_Y[1]-TRUNK_YEAR_Y[2])*0.5, key: 'Y2-Y3' });
+    milestones.push({ dist: trunkLen, key: 'Y3' });
+  }
+  if (usesBranch) {
+    const y4Dist = trunkLen + BRANCH_YEAR_FRACS[0]*branchLen;
+    milestones.push({ dist: trunkLen + (y4Dist-trunkLen)*0.5, key: 'BR-Y4' });
+    milestones.push({ dist: y4Dist, key: 'Y4' });
+    if (year === 5) {
+      const y5Dist = trunkLen + BRANCH_YEAR_FRACS[1]*branchLen;
+      milestones.push({ dist: y4Dist + (y5Dist-y4Dist)*0.5, key: 'BR-Y5' });
+      milestones.push({ dist: y5Dist, key: 'Y5' });
+    }
+  }
+
+  const fired = new Set();
+  const start = performance.now();
+
+  function frame(now) {
+    const t = Math.min((now-start)/DURATION, 1);
+    const distNow = t * totalDist;
+    let px, py;
+    if (distNow <= trunkDist) {
+      px = CX; py = TRUNK_BOT - distNow;
+    } else {
+      const p = branchDist > 0 ? (distNow - trunkDist) / branchDist : 1;
+      const pt = bezierPt(p*branchFrac, CX, BRANCH_SPLIT_Y, cpx, BRANCH_CP_Y, sx, 130);
+      px = pt.x; py = pt.y;
+    }
+    tracer.setAttribute('cx', px);
+    tracer.setAttribute('cy', py);
+
+    milestones.forEach(({ dist, key }) => {
+      if (!fired.has(key) && distNow >= dist) { fired.add(key); onSegLit(key); }
+    });
+
+    if (t < 1) requestAnimationFrame(frame);
+    else { svgEl.removeChild(tracer); onDone(); }
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ─── MAIN APP ─────────────────────────────────────────────────────────── */
+function App() {
+  const svgRef  = useRef(null);
+  const wrapRef = useRef(null);
+
+  // refs for gesture/pan handling (bypass React for live updates)
+  const liveZoom   = useRef({ scale:1, tx:0, ty:0 });
+  const panRef     = useRef(null); // { startX, startY, startTx, startTy }
+  const pinchRef   = useRef(null); // { startDist, startMid, startZoom }
+  const gestureRef = useRef(false);
+
+  const [treeOpened,    setTreeOpened]    = useState(false);
+  const [activeTrack,   setActiveTrack]   = useState(null);
+  const [activeYear,    setActiveYear]    = useState(null);
+  const [activeSem,     setActiveSem]     = useState(null);
+  const [activeMod,     setActiveMod]     = useState(null);
+  const [activeRes,     setActiveRes]     = useState(null);
+
+  // litSegs: set of segment keys fired by the tracer
+  const [litSegs, setLitSegs] = useState(new Set());
+  // which specialty branch tip is "revealed" (just the tip node & path appears, no glow yet)
+  const [revealedTrack, setRevealedTrack] = useState(null);
+
+  const [semNodes, setSemNodes] = useState([]);
+  const [modNodes, setModNodes] = useState([]);
+  const [resNodes, setResNodes] = useState([]);
+
+  const [zoom, setZoom] = useState({ scale:1, tx:0, ty:0 });
+  const [hint, setHint] = useState('TOUCH THE TRUNK TO BEGIN');
+
+  /* ── zoom helpers ── */
+  function getMinScale() {
+    const el = wrapRef.current;
+    const W = el?.clientWidth  || window.innerWidth;
+    const H = el?.clientHeight || window.innerHeight;
+    const MARGIN = 80;
+    return Math.min((W - MARGIN*2) / SVG_W, (H - MARGIN*2) / SVG_H);
+  }
+  function clampScale(s) {
+    return Math.max(getMinScale(), Math.min(s, 14));
+  }
+  function applyZoom(z, animated) {
+    liveZoom.current = z;
+    const inner = wrapRef.current?.firstElementChild;
+    if (inner) {
+      inner.style.transition = animated
+        ? 'transform 0.85s cubic-bezier(0.34,1.1,0.64,1)'
+        : 'none';
+      inner.style.transform = `translate(${z.tx}px,${z.ty}px) scale(${z.scale})`;
+    }
+    setZoom(z);
+  }
+  function zoomTo(x, y, scale) {
+    const W = wrapRef.current?.clientWidth  || window.innerWidth;
+    const H = wrapRef.current?.clientHeight || window.innerHeight;
+    const base = Math.min(W/SVG_W, H/SVG_H);
+    const s = clampScale(scale * base);
+    applyZoom({ scale: s, tx: W/2 - x*s, ty: H/2 - y*s }, true);
+  }
+  function resetZoom() {
+    const W = wrapRef.current?.clientWidth  || window.innerWidth;
+    const H = wrapRef.current?.clientHeight || window.innerHeight;
+    const s = getMinScale();
+    applyZoom({ scale: s, tx: (W - SVG_W*s)/2, ty: (H - SVG_H*s)/2 }, true);
+  }
+  function zoomBy(factor, cx, cy) {
+    const W = wrapRef.current?.clientWidth  || window.innerWidth;
+    const H = wrapRef.current?.clientHeight || window.innerHeight;
+    cx = cx ?? W/2; cy = cy ?? H/2;
+    const prev = liveZoom.current;
+    const s = clampScale(prev.scale * factor);
+    applyZoom({
+      scale: s,
+      tx: cx - (cx - prev.tx) * (s / prev.scale),
+      ty: cy - (cy - prev.ty) * (s / prev.scale),
+    }, false);
+  }
+  useEffect(() => { resetZoom(); }, []);
+
+  /* ── touch: pinch-zoom + one-finger pan ── */
+  useEffect(() => {
+    const el = wrapRef.current; if (!el) return;
+    function tdist(a,b){ const dx=a.clientX-b.clientX,dy=a.clientY-b.clientY; return Math.sqrt(dx*dx+dy*dy); }
+    function tmid(a,b){ return { x:(a.clientX+b.clientX)/2, y:(a.clientY+b.clientY)/2 }; }
+
+    function onStart(e) {
+      if (e.touches.length === 2) {
+        e.preventDefault(); gestureRef.current = true;
+        panRef.current = null;
+        const [t1,t2] = [e.touches[0], e.touches[1]];
+        pinchRef.current = { startDist: tdist(t1,t2), startMid: tmid(t1,t2), startZoom: {...liveZoom.current} };
+      } else if (e.touches.length === 1) {
+        panRef.current = { startX: e.touches[0].clientX, startY: e.touches[0].clientY,
+                           startTx: liveZoom.current.tx, startTy: liveZoom.current.ty };
+      }
+    }
+    function onMove(e) {
+      if (e.touches.length === 2 && pinchRef.current) {
+        e.preventDefault();
+        const [t1,t2] = [e.touches[0], e.touches[1]];
+        const d   = tdist(t1,t2);
+        const mid = tmid(t1,t2);
+        const p   = pinchRef.current;
+        const base = p.startZoom;
+        const s = clampScale(base.scale * (d / p.startDist));
+        // zoom around pinch midpoint + translate for finger movement
+        const tx = mid.x - (p.startMid.x - base.tx) * (s / base.scale) - (p.startMid.x - mid.x);
+        const ty = mid.y - (p.startMid.y - base.ty) * (s / base.scale) - (p.startMid.y - mid.y);
+        applyZoom({ scale:s, tx, ty }, false);
+      } else if (e.touches.length === 1 && panRef.current && !pinchRef.current) {
+        e.preventDefault();
+        const dx = e.touches[0].clientX - panRef.current.startX;
+        const dy = e.touches[0].clientY - panRef.current.startY;
+        const z  = liveZoom.current;
+        applyZoom({ scale: z.scale, tx: panRef.current.startTx + dx, ty: panRef.current.startTy + dy }, false);
+      }
+    }
+    function onEnd(e) {
+      if (e.touches.length < 2) pinchRef.current = null;
+      if (e.touches.length === 0) { panRef.current = null; gestureRef.current = false; }
+    }
+    el.addEventListener('touchstart',  onStart, { passive:false });
+    el.addEventListener('touchmove',   onMove,  { passive:false });
+    el.addEventListener('touchend',    onEnd);
+    el.addEventListener('touchcancel', onEnd);
+    return () => {
+      el.removeEventListener('touchstart',  onStart);
+      el.removeEventListener('touchmove',   onMove);
+      el.removeEventListener('touchend',    onEnd);
+      el.removeEventListener('touchcancel', onEnd);
+    };
+  }, []);
+
+  /* ── mouse: wheel zoom + drag pan ── */
+  useEffect(() => {
+    const el = wrapRef.current; if (!el) return;
+    let dragging = false, dragStart = null;
+
+    function onWheel(e) {
+      e.preventDefault();
+      zoomBy(e.deltaY < 0 ? 1.1 : 1/1.1, e.clientX, e.clientY);
+    }
+    function onMouseDown(e) {
+      if (e.button !== 0) return;
+      dragging = true;
+      dragStart = { x: e.clientX, y: e.clientY, tx: liveZoom.current.tx, ty: liveZoom.current.ty };
+      el.style.cursor = 'grabbing';
+    }
+    function onMouseMove(e) {
+      if (!dragging || !dragStart) return;
+      const dx = e.clientX - dragStart.x, dy = e.clientY - dragStart.y;
+      const z  = liveZoom.current;
+      applyZoom({ scale: z.scale, tx: dragStart.tx + dx, ty: dragStart.ty + dy }, false);
+    }
+    function onMouseUp() {
+      dragging = false; dragStart = null;
+      el.style.cursor = '';
+    }
+
+    el.addEventListener('wheel',     onWheel, { passive:false });
+    el.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup',   onMouseUp);
+    return () => {
+      el.removeEventListener('wheel',     onWheel);
+      el.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup',   onMouseUp);
+    };
+  }, []);
+
+  /* ── node bloom helpers ── */
+  function bloomNodes(cx, cy, items, radius, setter, delay=50) {
+    const nodes = items.map((id,i) => {
+      const angle = (2*Math.PI/items.length)*i - Math.PI/2;
+      return { id, x: cx+Math.cos(angle)*radius, y: cy+Math.sin(angle)*radius, cx, cy, visible:false };
+    });
+    setter(nodes);
+    nodes.forEach((_,i) => setTimeout(()=>
+      setter(prev=>prev.map((p,pi)=>pi===i?{...p,visible:true}:p)), i*delay+80));
+  }
+  function bloomSemNodes(cx, cy, semKeys, radius, setter) {
+    const dirs = { S1:-1, S2:1 };
+    const nodes = semKeys.map(id=>({ id, x:cx+(dirs[id]??1)*radius, y:cy, cx, cy, visible:false }));
+    setter(nodes);
+    nodes.forEach((_,i) => setTimeout(()=>
+      setter(prev=>prev.map((p,pi)=>pi===i?{...p,visible:true}:p)), i*120+80));
+  }
+
+  /* ── navigation ── */
+  function openTree() {
+    if (treeOpened) return;
+    setTreeOpened(true);
+    setHint('CLICK A YEAR OR A SPECIALTY');
+  }
+
+  // Clicking the specialty TIP node just reveals that branch (no tracer, no glow).
+  // The tracer only runs when you click a YEAR node on the branch.
+  function revealTrack(trackId) {
+    if (!TRACKS[trackId]) return;
+    if (!treeOpened) openTree();
+    // Toggle: click again = deselect
+    if (revealedTrack === trackId && !activeTrack) {
+      setRevealedTrack(null);
+      setHint('CLICK A YEAR OR A SPECIALTY');
+      return;
+    }
+    // If a different track was active, reset everything
+    if (activeTrack && activeTrack !== trackId) {
+      setActiveTrack(null); setLitSegs(new Set()); setActiveYear(null);
+      setActiveSem(null); setActiveMod(null); setActiveRes(null);
+      setSemNodes([]); setModNodes([]); setResNodes([]);
+    }
+    setRevealedTrack(trackId);
+    setHint('CLICK Y4 OR Y5 ON THE BRANCH');
+  }
+
+  // Clicking a YEAR NODE on a branch runs the tracer from scratch through trunk → branch
+  function activateYear(trackId, year) {
+    if (!treeOpened) openTree();
+    // Toggle: same year & same track = go back
+    if (activeYear === year && activeTrack === trackId) { goBack(); return; }
+
+    setSemNodes([]); setModNodes([]); setResNodes([]);
+    setActiveSem(null); setActiveMod(null); setActiveRes(null);
+    setLitSegs(new Set());
+    setActiveTrack(trackId);
+    setActiveYear(year);
+    setRevealedTrack(trackId);
+    setHint('TRACING PATH…');
+
+    runTracer(
+      svgRef.current, { specId: trackId, year },
+      (key) => setLitSegs(prev => { const n = new Set(prev); n.add(key); return n; }),
+      () => {
+        const pos  = getBranchYearPos(trackId, BRANCH_YEAR_FRACS[year-4]);
+        const yearData = TRACKS[trackId].years[year];
+        const semKeys  = Object.entries(yearData).filter(([,v])=>v!==null).map(([k])=>k);
+        bloomSemNodes(pos.x, pos.y, semKeys.map(k=>`S${k.slice(1)}`), 80, setSemNodes);
+        zoomTo(pos.x, pos.y, 2.6);
+        setHint('CLICK A SEMESTER NODE');
+      }
+    );
+
+    // Immediately zoom to show the whole branch during trace
+    zoomTo(SPEC_X[trackId], 350, 1.3);
+  }
+
+  function activateCommonYear(year) {
+    if (!treeOpened) openTree();
+    if (activeYear === year && !activeTrack) { goBack(); return; }
+    setActiveTrack(null); setRevealedTrack(null); setLitSegs(new Set());
+    setActiveYear(year);
+    setActiveSem(null); setActiveMod(null); setActiveRes(null);
+    setSemNodes([]); setModNodes([]); setResNodes([]);
+    setHint('TRACING PATH…');
+
+    runTracer(
+      svgRef.current, { specId: null, year },
+      (key) => setLitSegs(prev => { const n = new Set(prev); n.add(key); return n; }),
+      () => {
+        const pos = { x:CX, y:TRUNK_YEAR_Y[year-1] };
+        const yearData = COMMON_CORE[year];
+        const semKeys  = Object.entries(yearData).filter(([,v])=>v!==null).map(([k])=>k);
+        bloomSemNodes(pos.x, pos.y, semKeys.map(k=>`S${k.slice(1)}`), 80, setSemNodes);
+        zoomTo(pos.x, pos.y, 2.6);
+        setHint('CLICK A SEMESTER NODE');
+      }
+    );
+
+    // Immediately zoom to show the whole trunk during trace
+    zoomTo(CX, 500, 1.3);
+  }
+
+  function activateSem(semId, sx, sy) {
+    if (activeSem === semId) { goBack(); return; }
+    setActiveSem(semId); setActiveMod(null); setActiveRes(null);
+    setModNodes([]); setResNodes([]);
+    const yearData = activeTrack ? TRACKS[activeTrack].years[activeYear] : COMMON_CORE[activeYear];
+    const modules  = (yearData[semId]||[]).filter(m=>m!=='—');
+    bloomNodes(sx, sy, modules, 85, setModNodes, 50);
+    zoomTo(sx, sy, 3.6);
+    setHint('CLICK A MODULE');
+  }
+
+  function activateMod(modId, mx, my) {
+    if (activeMod === modId) { goBack(); return; }
+    setActiveMod(modId); setActiveRes(null); setResNodes([]);
+    bloomNodes(mx, my, RESOURCES, 55, setResNodes, 40);
+    zoomTo(mx, my, 4.8);
+    setHint('EXPLORING · ' + modId.toUpperCase().substring(0,26));
+  }
+
+  function activateRes(resId) {
+    setActiveRes(prev => prev===resId ? null : resId);
+  }
+
+  function goBack() {
+    if (activeMod) {
+      setActiveMod(null); setActiveRes(null); setResNodes([]);
+      const sn = semNodes.find(n=>n.id===activeSem);
+      if (sn) zoomTo(sn.x, sn.y, 3.6);
+      setHint('CLICK A MODULE');
+    } else if (activeSem) {
+      setActiveSem(null); setActiveMod(null); setResNodes([]); setModNodes([]);
+      const pos = activeTrack
+        ? getBranchYearPos(activeTrack, BRANCH_YEAR_FRACS[activeYear-4])
+        : { x:CX, y:TRUNK_YEAR_Y[activeYear-1] };
+      zoomTo(pos.x, pos.y, 2.6);
+      setHint('CLICK A SEMESTER NODE');
+    } else if (activeYear && activeTrack) {
+      setActiveYear(null); setActiveSem(null); setModNodes([]); setResNodes([]); setSemNodes([]);
+      setLitSegs(new Set());
+      zoomTo(SPEC_X[activeTrack], 350, 1.3);
+      setHint('CLICK Y4 OR Y5 ON THE BRANCH');
+    } else if (activeYear && !activeTrack) {
+      setActiveYear(null); setActiveSem(null); setModNodes([]); setResNodes([]); setSemNodes([]);
+      setLitSegs(new Set());
+      resetZoom(); setHint('CLICK A YEAR OR A SPECIALTY');
+    } else if (revealedTrack) {
+      setRevealedTrack(null); setActiveTrack(null); setLitSegs(new Set());
+      resetZoom(); setHint('CLICK A YEAR OR A SPECIALTY');
+    } else {
+      setTreeOpened(false); setLitSegs(new Set());
+      setSemNodes([]); setModNodes([]); setResNodes([]);
+      resetZoom(); setHint('TOUCH THE TRUNK TO BEGIN');
+    }
+  }
+
+  const transform = `translate(${zoom.tx}px,${zoom.ty}px) scale(${zoom.scale})`;
+  const canGoBack = treeOpened;
+
+  return (
+    <div style={{width:'100%',height:'100vh',background:'#0B0F19',overflow:'hidden'}}>
+      <div ref={wrapRef} style={{width:'100%',height:'100%',position:'relative',overflow:'hidden',cursor:'grab'}}>
+        <div style={{position:'absolute',top:0,left:0,transformOrigin:'0 0',
+          transition:'transform 0.85s cubic-bezier(0.34,1.1,0.64,1)', transform}}>
+          <svg ref={svgRef} viewBox={`0 0 ${SVG_W} ${SVG_H}`} width={SVG_W} height={SVG_H}
+            style={{display:'block',fontFamily:"'JetBrains Mono',monospace",overflow:'visible'}}>
+            <TreeSVG
+              treeOpened={treeOpened}
+              litSegs={litSegs}
+              activeTrack={activeTrack}
+              revealedTrack={revealedTrack}
+              activeYear={activeYear}
+              activeSem={activeSem}
+              activeMod={activeMod}
+              activeRes={activeRes}
+              semNodes={semNodes}
+              modNodes={modNodes}
+              resNodes={resNodes}
+              onTrunkClick={openTree}
+              onTrackClick={revealTrack}
+              onCommonYearClick={activateCommonYear}
+              onYearClick={activateYear}
+              onSemClick={activateSem}
+              onModClick={activateMod}
+              onResClick={activateRes}
+            />
+          </svg>
+        </div>
+        <div className="hint">{hint}</div>
+
+        {/* zoom + back controls */}
+        <div style={{position:'fixed',bottom:40,left:16,display:'flex',flexDirection:'column',gap:6,zIndex:200}}>
+          {canGoBack && (
+            <button onClick={goBack}
+              style={{width:34,height:34,background:'rgba(11,15,25,0.92)',
+                border:'1px solid rgba(45,212,191,0.25)',borderRadius:5,
+                color:'#2DD4BF',fontSize:15,cursor:'pointer',
+                display:'flex',alignItems:'center',justifyContent:'center',
+                fontFamily:'inherit',userSelect:'none',transition:'border-color 0.2s,background 0.2s'}}>
+              ←
+            </button>
+          )}
+          {[['＋',1.35],['－',1/1.35],['⊡',0]].map(([lbl,f])=>(
+            <button key={lbl} onClick={()=>f===0?resetZoom():zoomBy(f)}
+              style={{width:34,height:34,background:'rgba(11,15,25,0.92)',
+                border:'1px solid rgba(45,212,191,0.25)',borderRadius:5,
+                color:'#2DD4BF',fontSize:lbl==='⊡'?13:18,cursor:'pointer',
+                display:'flex',alignItems:'center',justifyContent:'center',
+                fontFamily:'inherit',userSelect:'none',transition:'border-color 0.2s,background 0.2s'}}>
+              {lbl}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─── SVG TREE COMPONENT ────────────────────────────────────────────────── */
+const DIM = 0.04;
+
+function TreeSVG({
+  treeOpened, litSegs, activeTrack, revealedTrack, activeYear,
+  activeSem, activeMod, activeRes,
+  semNodes, modNodes, resNodes,
+  onTrunkClick, onTrackClick, onCommonYearClick, onYearClick,
+  onSemClick, onModClick, onResClick
+}) {
+  const YEAR_LABELS = ['1ST YEAR','2ND YEAR','3RD YEAR'];
+
+  // Derive which trunk segments are lit
+  const segLit = (key) => litSegs.has(key);
+
+  // Trunk segment stroke: between Yn and Yn+1, the line glows when the ball has passed the midpoint
+  // We store the glow as individual <line> overlays.
+  // Y1 node lit = segLit('Y1'), segment Y1→Y2 = segLit('Y1-Y2'), Y2 node = segLit('Y2'), etc.
+
+  const yearNodeLit   = [segLit('Y1'), segLit('Y2'), segLit('Y3')];
+  const trunkSegLit   = [segLit('Y1-Y2'), segLit('Y2-Y3')];
+  // branch segment: segLit('BR-Y4') covers from Y3 to Y4, segLit('BR-Y5') from Y4 to Y5
+  const branchSegLit  = [segLit('BR-Y4'), segLit('BR-Y5')];
+  const branchNodeLit = [segLit('Y4'), segLit('Y5')];
+
+  const anyTrackContext = !!(activeTrack || revealedTrack);
+  const anyYearContext  = !!activeYear;
+
+  const yearInFocus = (i) => {
+    if (!anyTrackContext && !anyYearContext) return true;
+    if (activeYear === i+1 && !activeTrack) return true;
+    if (anyTrackContext && yearNodeLit[i]) return true;
+    return false;
+  };
+  const trackInFocus = (id) => {
+    if (!anyTrackContext && !anyYearContext) return true;
+    return revealedTrack===id || activeTrack===id;
+  };
+
+  return <>
+    {/* ── BASE TRUNK ── */}
+    {treeOpened ? (
+      <line x1={CX} y1={TRUNK_BOT} x2={CX} y2={TRUNK_TOP}
+        stroke="#1E293B" strokeWidth="10" strokeLinecap="round"/>
+    ) : (
+      <line x1={CX} y1={TRUNK_BOT} x2={CX} y2={TRUNK_BOT-60}
+        stroke="#1E293B" strokeWidth="10" strokeLinecap="round"
+        className="node-click" onClick={onTrunkClick}/>
+    )}
+
+    {!treeOpened && (
+      <g className="node-click" onClick={onTrunkClick}>
+        <circle cx={CX} cy={TRUNK_BOT-60} r="11" fill="#0B0F19" stroke="#2DD4BF" strokeWidth="1.5">
+          <animate attributeName="r" values="11;14;11" dur="1.8s" repeatCount="indefinite"/>
+        </circle>
+      </g>
+    )}
+
+    {treeOpened && <>
+      {/* ── TRUNK GLOW SEGMENTS (Y1→Y2 and Y2→Y3) ── */}
+      {trunkSegLit[0] && (
+        <line x1={CX} y1={TRUNK_YEAR_Y[0]} x2={CX} y2={TRUNK_YEAR_Y[1]}
+          stroke="#2DD4BF" strokeWidth="3" strokeLinecap="round" opacity="0.5"
+          style={{transition:'opacity 0.4s'}}/>
+      )}
+      {trunkSegLit[1] && (
+        <line x1={CX} y1={TRUNK_YEAR_Y[1]} x2={CX} y2={TRUNK_YEAR_Y[2]}
+          stroke="#2DD4BF" strokeWidth="3" strokeLinecap="round" opacity="0.5"
+          style={{transition:'opacity 0.4s'}}/>
+      )}
+
+      {/* ── TRUNK YEAR NODES — all 3 clickable (common core) ── */}
+      {TRUNK_YEAR_Y.map((y,i)=>{
+        const lit  = yearNodeLit[i];
+        const isActiveCommonYear = activeYear===i+1 && !activeTrack;
+        const focus = yearInFocus(i);
+        return (
+          <g key={i} className="node-click"
+            style={{opacity:focus?1:DIM, transition:'opacity 0.4s'}}
+            onClick={()=>onCommonYearClick(i+1)}>
+            {(lit||isActiveCommonYear) && <circle cx={CX} cy={y} r="18" fill="#2DD4BF" opacity="0.08"/>}
+            <circle cx={CX} cy={y} r="10"
+              fill={(lit||isActiveCommonYear)?'#2DD4BF':'#1E293B'}
+              stroke={(lit||isActiveCommonYear)?'rgba(45,212,191,0.4)':'#2DD4BF'}
+              strokeWidth={(lit||isActiveCommonYear)?0:1}
+              style={{transition:'fill 0.5s'}}/>
+            <text x={CX+22} y={y} fontSize="8"
+              fill={(lit||isActiveCommonYear)?'#2DD4BF':'#334155'}
+              dominantBaseline="central" textAnchor="start"
+              style={{transition:'fill 0.5s'}}>
+              {YEAR_LABELS[i]} · CORE
+            </text>
+          </g>
+        );
+      })}
+
+      {/* ── BRANCH PATHS (shown when that track is revealed or active) ── */}
+      {Object.keys(SPEC_X).map(id=>{
+        const sx=SPEC_X[id], cpx=(CX+sx)/2;
+        const isRevealed = revealedTrack===id || activeTrack===id;
+        const focus = trackInFocus(id);
+        if (!isRevealed && anyTrackContext) return null; // hide other branches once one is chosen
+        const isActive = activeTrack===id;
+        return (
+          <path key={id}
+            d={`M${CX},${BRANCH_SPLIT_Y} Q${cpx},${BRANCH_CP_Y} ${sx},130`}
+            stroke={isActive ? '#2DD4BF' : '#1E293B'}
+            strokeWidth={isRevealed ? 4 : 3}
+            fill="none"
+            opacity={focus ? 1 : DIM}
+            style={{transition:'stroke 0.4s, stroke-width 0.3s, opacity 0.4s'}}
+          />
+        );
+      })}
+
+      {/* ── BRANCH GLOW OVERLAYS (Y3→Y4 and Y4→Y5) ── drawn as bezier sub-segments ── */}
+      {activeTrack && (() => {
+        const sx=SPEC_X[activeTrack], cpx=(CX+sx)/2;
+        const segs = [
+          // Y3→Y4: t from 0 to BRANCH_YEAR_FRACS[0]
+          { lit: branchSegLit[0],
+            d: `M${CX},${BRANCH_SPLIT_Y} Q${cpx},${BRANCH_CP_Y} ${getBranchYearPos(activeTrack,BRANCH_YEAR_FRACS[0]).x},${getBranchYearPos(activeTrack,BRANCH_YEAR_FRACS[0]).y}` },
+          // Y4→Y5: approximate with the bezier portion from frac[0] to frac[1]
+          { lit: branchSegLit[1],
+            d: (() => {
+              const p4 = getBranchYearPos(activeTrack, BRANCH_YEAR_FRACS[0]);
+              const p5 = getBranchYearPos(activeTrack, BRANCH_YEAR_FRACS[1]);
+              const pm = getBranchYearPos(activeTrack, (BRANCH_YEAR_FRACS[0]+BRANCH_YEAR_FRACS[1])/2);
+              return `M${p4.x},${p4.y} Q${pm.x},${pm.y} ${p5.x},${p5.y}`;
+            })()
+          }
+        ];
+        return segs.map((seg,i)=>seg.lit && (
+          <path key={i} d={seg.d}
+            stroke="#2DD4BF" strokeWidth="3" fill="none"
+            opacity="0.5" strokeLinecap="round"
+            style={{transition:'opacity 0.4s'}}/>
+        ));
+      })()}
+
+      {/* ── SPECIALTY TIP NODES ── */}
+      {Object.keys(SPEC_X).map(id=>{
+        const sx=SPEC_X[id];
+        const isRevealed = revealedTrack===id || activeTrack===id;
+        const focus = trackInFocus(id);
+        if (!isRevealed && anyTrackContext) return null;
+        const isActive = activeTrack===id;
+        return (
+          <g key={id} className="node-click" onClick={()=>onTrackClick(id)}
+            style={{opacity:focus?1:DIM, transition:'opacity 0.4s'}}>
+            <circle cx={sx} cy={130} r="9"
+              fill={isActive?'#2DD4BF':'#0B0F19'}
+              stroke={isActive?'#fff':'#2DD4BF'}
+              strokeWidth={isActive?2:1.5}
+              style={{transition:'fill 0.35s'}}/>
+            <text x={sx} y={110} fontSize="7.5" fill={isActive?'#2DD4BF':'#475569'} textAnchor="middle">{id}</text>
+            <text x={sx} y={148} fontSize="6.5" fill="#1a2a40" textAnchor="middle">
+              {TRACKS[id]?.name?.substring(0,18)||id}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* ── BRANCH YEAR NODES — Y4 & Y5 (only when a track is revealed/active) ── */}
+      {(revealedTrack||activeTrack) && [4,5].map((year,i)=>{
+        const tid  = activeTrack || revealedTrack;
+        const pos  = getBranchYearPos(tid, BRANCH_YEAR_FRACS[i]);
+        const isActiveYear = activeYear===year;
+        const lit  = branchNodeLit[i];
+        const focus = !activeSem || isActiveYear;
+        return (
+          <g key={year} className="node-click"
+            onClick={()=>onYearClick(tid, year)}
+            style={{opacity:focus?1:DIM, transition:'opacity 0.4s'}}>
+            {(lit||isActiveYear) && <circle cx={pos.x} cy={pos.y} r="18" fill="#2DD4BF" opacity="0.08"/>}
+            <circle cx={pos.x} cy={pos.y} r="10"
+              fill={isActiveYear?'#2DD4BF':lit?'#0d3d36':'#0B0F19'}
+              stroke={isActiveYear?'#fff':'#2DD4BF'}
+              strokeWidth={isActiveYear?2:1.5}
+              style={{transition:'fill 0.4s'}}/>
+            <text x={pos.x} y={pos.y+20} fontSize="8"
+              fill={isActiveYear?'#2DD4BF':lit?'#2DD4BF':'#334155'}
+              textAnchor="middle" style={{transition:'fill 0.4s'}}>
+              Y{year}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* ── SEMESTER NODES — S1 left, S2 right ── */}
+      {semNodes.map(n=>{
+        const isActive = activeSem===n.id;
+        const yearPos = (activeTrack && activeYear)
+          ? getBranchYearPos(activeTrack, BRANCH_YEAR_FRACS[activeYear-4])
+          : (activeYear ? {x:CX, y:TRUNK_YEAR_Y[activeYear-1]} : {x:CX,y:CX});
+        const focus = !activeMod && (!activeSem||isActive) ? true : isActive;
+        const isLeft = n.x < yearPos.x + 1;
+        return (
+          <g key={n.id} className="node-click"
+            style={{opacity:n.visible?(focus?1:DIM):0, transition:'opacity 0.3s'}}
+            onClick={()=>onSemClick(n.id, n.x, n.y)}>
+            <line x1={yearPos.x} y1={yearPos.y} x2={n.x} y2={n.y} stroke="#0f3a30" strokeWidth="1.5" pointerEvents="none"/>
+            <circle cx={n.x} cy={n.y} r="9"
+              fill={isActive?'#2DD4BF':'#0B0F19'} stroke="#2DD4BF" strokeWidth="1.5"
+              style={{transition:'fill 0.3s'}}/>
+            <text x={isLeft?n.x-15:n.x+15} y={n.y} fontSize="8"
+              fill={isActive?'#2DD4BF':'#475569'}
+              textAnchor={isLeft?'end':'start'} dominantBaseline="central">
+              {n.id}
+            </text>
+          </g>
+        );
+      })}
+
+      {/* ── MODULE NODES ── */}
+      {modNodes.map(n=>{
+        const isActive = activeMod===n.id;
+        const short = n.id.length>14 ? n.id.substring(0,12)+'…' : n.id;
+        const above = n.y < n.cy;
+        const focus = !activeMod || isActive;
+        return (
+          <g key={n.id} className="node-click"
+            style={{opacity:n.visible?(focus?1:DIM):0, transition:'opacity 0.35s'}}
+            onClick={()=>onModClick(n.id, n.x, n.y)}>
+            <line x1={n.cx} y1={n.cy} x2={n.x} y2={n.y} stroke="#0f3530" strokeWidth="1" pointerEvents="none"/>
+            <circle cx={n.x} cy={n.y} r="7"
+              fill={isActive?'#16a392':'#0B0F19'} stroke="#16a392" strokeWidth="1.5"
+              style={{transition:'fill 0.3s'}}/>
+            <text x={n.x} y={n.y+(above?-14:16)} fontSize="7"
+              fill={isActive?'#2DD4BF':'#334155'} textAnchor="middle"
+              style={{transition:'fill 0.3s'}}>{short}</text>
+          </g>
+        );
+      })}
+
+      {/* ── RESOURCE NODES ── */}
+      {resNodes.map(n=>{
+        const isActive = activeRes===n.id;
+        const above = n.y < n.cy;
+        return (
+          <g key={n.id} className="node-click"
+            style={{opacity:n.visible?1:0, transition:'opacity 0.3s'}}
+            onClick={()=>onResClick(n.id)}>
+            <line x1={n.cx} y1={n.cy} x2={n.x} y2={n.y} stroke="#0a2520" strokeWidth="1" pointerEvents="none"/>
+            <circle cx={n.x} cy={n.y} r="5"
+              fill={isActive?'#0f766e':'#060e0c'} stroke="#0f766e" strokeWidth="1"
+              style={{transition:'fill 0.3s'}}/>
+            <text x={n.x} y={n.y+(above?-11:13)} fontSize="6.5"
+              fill={isActive?'#2DD4BF':'#0f766e'} textAnchor="middle">{n.id}</text>
+          </g>
+        );
+      })}
+    </>}
+
+    <text x="24" y="22" fontSize="8" fill="#2DD4BF" letterSpacing="2">
+      NHSM · TREE OF KNOWLEDGE
+    </text>
+  </>;
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script>
+<script>
+  // Compile the app source with the classic JSX runtime explicitly forced.
+  // (Babel Standalone's auto-scan can default to the "automatic" runtime on
+  // some versions, which emits an `import` statement that fails outside a
+  // module context — this keeps the build deterministic regardless.)
+  (function () {
+    var src = document.getElementById('app-source').textContent;
+    var out = Babel.transform(src, { presets: [['react', { runtime: 'classic' }]] }).code;
+    var script = document.createElement('script');
+    script.text = out;
+    document.body.appendChild(script);
+  })();
+</script>
+</body>
+</html>

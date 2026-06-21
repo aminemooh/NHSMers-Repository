@@ -1,0 +1,85 @@
+Created At: 2026-06-18T19:50:41Z
+Completed At: 2026-06-18T19:50:41Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 907
+Total Bytes: 34324
+Showing lines 240 to 320
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+240:         label: 'Fourth Year - Semester 1',
+241:         modules: [
+242:           makeModule('sesa-s7-mod1', 'Stochastic processes'),
+243:           makeModule('sesa-s7-mod2', 'Time Series 1'),
+244:           makeModule('sesa-s7-mod3', 'Data Mining 2', PROJ_TYPES),
+245:           makeModule('sesa-s7-mod4', 'Advanced Optimization Algorithms and Graph Theory'),
+246:           makeModule('sesa-s7-mod5', 'Information Systems and Databases', LAB_TYPES),
+247:           makeModule('sesa-s7-mod6', 'Stochastic Simulation', LAB_TYPES),
+248:           makeModule('sesa-s7-mod7', 'Introduction to Finance'),
+249:         ],
+250:       },
+251:       {
+252:         id: 'sesa-s8',
+253:         label: 'Fourth Year - Semester 2',
+254:         modules: [
+255:           makeModule('sesa-s8-mod1', 'Non-parametric Estimation'),
+256:           makeModule('sesa-s8-mod2', 'Time Series 2'),
+257:           makeModule('sesa-s8-mod3', 'Stochastic Differential Calculus'),
+258:           makeModule('sesa-s8-mod4', 'Extreme Value Statistics'),
+259:           makeModule('sesa-s8-mod5', 'Actuarial Science 1'),
+260:           makeModule('sesa-s8-mod6', 'Optimization in Economics and Finance'),
+261:           makeModule('sesa-s8-mod7', 'Insurance Law'),
+262:           makeModule('sesa-s8-mod8', 'Entrepreneurship'),
+263:         ],
+264:       },
+265:       {
+266:         id: 'sesa-s9',
+267:         label: 'Fifth Year - Semester 1',
+268:         modules: [
+269:           makeModule('sesa-s9-mod1', 'Actuarial Science 2'),
+270:           makeModule('sesa-s9-mod2', 'D
+<truncated 400 bytes>
+        ],
+277:       },
+278:     ],
+279:   },
+280:   {
+281:     id: 'ccs',
+282:     label: 'Cryptology & Security',
+283:     abbr: 'CCS',
+284:     color: '#10b981',
+285:     svgX: 463,
+286:     svgY: 415,
+287:     semesters: [
+288:       {
+289:         id: 'ccs-s7',
+290:         label: 'Fourth Year - Semester 1',
+291:         modules: [
+292:           makeModule('ccs-s7-mod1', 'Mathematical Tools for Cryptography'),
+293:           makeModule('ccs-s7-mod2', 'Cryptography', LAB_TYPES),
+294:           makeModule('ccs-s7-mod3', 'Operating Systems', LAB_TYPES),
+295:           makeModule('ccs-s7-mod4', 'Complexity Theory'),
+296:           makeModule('ccs-s7-mod5', 'Formal Calculus'),
+297:           makeModule('ccs-s7-mod6', 'Combinatorial Optimization'),
+298:           makeModule('ccs-s7-mod7', 'Chipsets Programming', LAB_TYPES),
+299:         ],
+300:       },
+301:       {
+302:         id: 'ccs-s8',
+303:         label: 'Fourth Year - Semester 2',
+304:         modules: [
+305:           makeModule('ccs-s8-mod1', 'Information Theory & Error-Correcting Codes'),
+306:           makeModule('ccs-s8-mod2', 'Networks and Protocols', LAB_TYPES),
+307:           makeModule('ccs-s8-mod3', 'Signal Processing', LAB_TYPES),
+308:           makeModule('ccs-s8-mod4', 'Number Theory & Cryptography'),
+309:           makeModule('ccs-s8-mod5', 'Arithmetic Algorithms', LAB_TYPES),
+310:           makeModule('ccs-s8-mod6', 'Advanced Graph Theory'),
+311:           makeModule('ccs-s8-mod7', 'Random Number Generators', LAB_TYPES),
+312:           makeModule('ccs-s8-mod8', 'Entrepreneurship'),
+313:         ],
+314:       },
+315:       {
+316:         id: 'ccs-s9',
+317:         label: 'Fifth Year - Semester 1',
+318:         modules: [
+319:           makeModule('ccs-s9-mod1', 'Cryptanalysis'),
+320:           makeModule('ccs-s9-mod2', 'Advanced Cryptography', PROJ_TYPES),
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

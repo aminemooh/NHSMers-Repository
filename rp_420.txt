@@ -1,0 +1,108 @@
+Created At: 2026-06-20T19:51:34Z
+Completed At: 2026-06-20T19:51:34Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 1135
+Total Bytes: 48992
+Showing lines 1 to 100
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: 'use client';
+2: 
+3: import { useState, useRef, useEffect } from 'react';
+4: 
+5: // ============================================================
+6: // INTERFACES
+7: // ============================================================
+8: 
+9: interface ResourceType {
+10:   id: string;
+11:   label: string;
+12: }
+13: 
+14: interface Module {
+15:   id: string;
+16:   label: string;
+17:   types: ResourceType[];
+18: }
+19: 
+20: interface Semester {
+21:   id: string;
+22:   label: string;
+23:   modules: Module[];
+24: }
+25: 
+26: interface YearNode {
+27:   id: string;
+28:   label: string;
+29:   sublabel: string;
+30:   type: 'trunk' | 'split';
+31:   semesters: Semester[];
+32: }
+33: 
+34: interface SpecialtyNode {
+35:   id: string;
+36:   label: string;
+37:   abbr: string;
+38:   color: string;
+39:   semesters: Semester[];
+40: }
+41: 
+42: // ============================================================
+43: // DATA
+44: // ============================================================
+45: 
+46: const RESOURCE_TYPES: ResourceType[] = [
+47:   { id: 'lectures', label: 'Lectures' },
+48:   { id: 'td', label: 'Worksheets' },
+49:   { id: 'tp', label: 'Labs' },
+50:   { id: 'projects', label: 'Projects' },
+51:   { id: 'exams', label: 'Exams' },
+52:   { id: 'resources', label: 'Resources' },
+53: ];
+54: 
+55: const ALL_TYPES = RESOURCE_TYPES;
+56: const BASIC_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'exams'].includes(t.id));
+57: const LAB_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'tp', 'exams', 'resources'].includes(t.id));
+58: const PROJ_TYPES = RESOURCE_TYPES;
+59: 
+60: function makeModule(id: string, label: string, types: ResourceType[] = BASIC_TYPES): Module {
+61:   return { id, label, types };
+62: }
+63: 
+64: const YEAR_NODES: YearNode[] = [
+65:   {
+66:     id: 'y1', label: 'First Year', sublabel: 'Preparatory Class', type: 'trunk',
+67:     semesters: [
+68:       {
+69:         id: 'y1s1', label: 'Semester 1',
+70:         modules: [
+71:           makeModule('y1s1-mod1', 'Analysis 1', LAB_TYPES),
+72:           makeModule('y1s1-mod2', 'Descriptive Statistics & Intro to Probability'),
+73:           makeModule('y1s1-mod3', 'Algebra 1'),
+74:           makeModule('y1s1-mod4', 'Discrete Mathematics 1'),
+75:           makeModule('y1s1-mod5', 'Algorithms & Data Structures 1', PROJ_TYPES),
+76:           makeModule('y1s1-mod6', 'Physics 1', LAB_TYPES),
+77:           makeModule('y1s1-mod7', 'History of Mathematics'),
+78:           makeModule('y1s1-mod8', 'English 1'),
+79:         ],
+80:       },
+81:       {
+82:         id: 'y1s2', label: 'Semester 2',
+83:         modules: [
+84:           makeModule('y1s2-mod1', 'Analysis 2'),
+85:           makeModule('y1s2-mod2', 'Probability 1'),
+86:           makeModule('y1s2-mod3', 'Algebra 2'),
+87:           makeModule('y1s2-mod4', 'Discrete Mathematics 2'),
+88:           makeModule('y1s2-mod5', 'Algorithms & Data Structures 2', PROJ_TYPES),
+89:           makeModule('y1s2-mod6', 'Physics 2', LAB_TYPES),
+90:           makeModule('y1s2-mod7', 'Mathematical Logic'),
+91:           makeModule('y1s2-mod8', 'English 2'),
+92:         ],
+93:       },
+94:     ],
+95:   },
+96:   {
+97:     id: 'y2', label: 'Second Year', sublabel: 'Preparatory Class', type: 'trunk',
+98:     semesters: [
+99:       {
+100:         id: 'y2s3', label: 'Semester 3',
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

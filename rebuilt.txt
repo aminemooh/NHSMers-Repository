@@ -1,0 +1,685 @@
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
+
+// ============================================================
+// INTERFACES
+// ============================================================
+
+interface ResourceType {
+  id: string;
+  label: string;
+}
+
+interface Module {
+  id: string;
+  label: string;
+  types: ResourceType[];
+}
+
+interface Semester {
+  id: string;
+  label: string;
+  modules: Module[];
+}
+
+interface YearNode {
+  id: string;
+  label: string;
+  sublabel: string;
+  type: 'trunk' | 'split';
+  semesters: Semester[];
+}
+
+interface SpecialtyNode {
+  id: string;
+  label: string;
+  abbr: string;
+  color: string;
+  semesters: Semester[];
+}
+
+// ============================================================
+// DATA
+// ============================================================
+
+const RESOURCE_TYPES: ResourceType[] = [
+  { id: 'lectures', label: 'Lectures' },
+  { id: 'td', label: 'Worksheets' },
+  { id: 'tp', label: 'Labs' },
+  { id: 'projects', label: 'Projects' },
+  { id: 'exams', label: 'Exams' },
+  { id: 'resources', label: 'Resources' },
+];
+
+const ALL_TYPES = RESOURCE_TYPES;
+const BASIC_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'exams'].includes(t.id));
+const LAB_TYPES = RESOURCE_TYPES.filter((t) => ['lectures', 'td', 'tp', 'exams', 'resources'].includes(t.id));
+const PROJ_TYPES = RESOURCE_TYPES;
+
+function makeModule(id: string, label: string, types: ResourceType[] = BASIC_TYPES): Module {
+  return { id, label, types };
+}
+
+const YEAR_NODES: YearNode[] = [
+  {
+    id: 'y1', label: 'First Year', sublabel: 'Preparatory Class', type: 'trunk',
+    semesters: [
+      {
+        id: 'y1s1', label: 'Semester 1',
+        modules: [
+          makeModule('y1s1-mod1', 'Analysis 1', LAB_TYPES),
+          makeModule('y1s1-mod2', 'Descriptive Statistics & Intro to Probability'),
+          makeModule('y1s1-mod3', 'Algebra 1'),
+          makeModule('y1s1-mod4', 'Discrete Mathematics 1'),
+          makeModule('y1s1-mod5', 'Algorithms & Data Structures 1', PROJ_TYPES),
+          makeModule('y1s1-mod6', 'Physics 1', LAB_TYPES),
+          makeModule('y1s1-mod7', 'History of Mathematics'),
+          makeModule('y1s1-mod8', 'English 1'),
+        ],
+      },
+      {
+        id: 'y1s2', label: 'Semester 2',
+        modules: [
+          makeModule('y1s2-mod1', 'Analysis 2'),
+          makeModule('y1s2-mod2', 'Probability 1'),
+          makeModule('y1s2-mod3', 'Algebra 2'),
+          makeModule('y1s2-mod4', 'Discrete Mathematics 2'),
+          makeModule('y1s2-mod5', 'Algorithms & Data Structures 2', PROJ_TYPES),
+          makeModule('y1s2-mod6', 'Physics 2', LAB_TYPES),
+          makeModule('y1s2-mod7', 'Mathematical Logic'),
+          makeModule('y1s2-mod8', 'English 2'),
+        ],
+      },
+    ],
+  },
+  {
+    id: 'y2', label: 'Second Year', sublabel: 'Preparatory Class', type: 'trunk',
+    semesters: [
+      {
+        id: 'y2s3', label: 'Semester 3',
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ====== REBUILD START ====== */
+/* ====== REBUILD END ====== */
+    const s = Math.min((W - 60) / contentW, (H - 60) / contentH);
+    applyZoom({ scale: s, tx: W / 2 - contentCX * s, ty: H / 2 - contentCY * s }, true);
+  }
+
+  // ── bloom helpers ──
+  function bloomNodes(
+    cx: number, cy: number,
+    items: { id: string; label: string }[],
+    radius: number,
+    setter: React.Dispatch<React.SetStateAction<AnimNode[]>>,
+    delay = 50
+  ) {
+    const positions = bloomPositions(cx, cy, items.length, radius);
+    const nodes: AnimNode[] = items.map((item, i) => ({
+      id: item.id, label: item.label,
+      x: positions[i].x, y: positions[i].y,
+      cx, cy, visible: false
+    }));
+    setter(nodes);
+    nodes.forEach((_, i) => setTimeout(() =>
+      setter(prev => prev.map((p, pi) => pi === i ? { ...p, visible: true } : p)), i * delay + 80));
+  }
+
+  function bloomSemNodes(cx: number, cy: number, semesters: Semester[], setter: React.Dispatch<React.SetStateAction<AnimNode[]>>) {
+    // For 1 sem: place above. For 2: left & right (original preferred layout).
+    // For 3+: evenly spaced circle.
+    let positions: { x: number; y: number }[];
+    const SEM_LR = 95; // horizontal offset for left/right layout
+    if (semesters.length === 1) {
+      positions = [{ x: cx, y: cy - 90 }];
+    } else if (semesters.length === 2) {
+      positions = [{ x: cx - SEM_LR, y: cy }, { x: cx + SEM_LR, y: cy }];
+    } else {
+      position
+<truncated 5412 bytes>
+:     const types = mod?.types || [];
+    bloomNodes(mx, my, types.map(t => ({ id: t.id, label: t.label })), MIN_RES_RADIUS, setResNodes, 40);
+    
+    // Zoom exactly to the clamped center of the resource circle
+    const { bcx, bcy } = getBloomCenter(mx, my, types.length, MIN_RES_RADIUS);
+    zoomTo(bcx, bcy, 4.0);
+    
+    setHint('Exploring · ' + (mod?.label.substring(0, 28) || ''));
+  }
+
+  function activateRes(resId: string) {
+    setActiveRes(prev => prev === resId ? null : resId);
+    // Link navigation will go here once links file is provided
+  }
+
+  function resetAll() {
+    setActiveTrack(null); setRevealedTrack(null); setLitSegs(new Set());
+    setActiveYear(null); setActiveSem(null); setActiveMod(null); setActiveRes(null);
+    setSemNodes([]); setModNodes([]); setResNodes([]);
+    homeZoom();
+    setHint('Click a year or a specialty to explore');
+  }
+
+  function goBack() {
+    if (activeMod) {
+      setActiveMod(null); setActiveRes(null); setResNodes([]);
+      const sn = semNodes.find(n => n.id === activeSem);
+      if (sn) {
+        let count = 8; // fallback count
+        if (activeTrack) {
+          const track = SPECIALTY_NODES.find(s => s.id === activeTrack);
+          const sem = track?.semesters.find(s => s.id === sn.id);
+          count = sem?.modules.length || 8;
+        } else if (activeYear) {
+          const yr = YEAR_NODES[activeYear - 1];
+          const sem = yr?.semesters.find(s => s.id === sn.id);
+          count = sem?.modules.length || 8;
+        }
+        const { bcx, bcy } = getBloomCenter(sn.x, sn.y, count, MIN_MOD_RADIUS);
+        zoomTo(bcx, bcy, 3.4);
+      }
+      setHint('Click a module');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      setHint('Click a module');
+    } else if (activeSem) {
+      setActiveSem(null); setActiveMod(null); setResNodes([]); setModNodes([]);
+      const pos = activeTrack && activeYear
+        ? getBranchYearPos(activeTrack, BRANCH_YEAR_FRACS[activeYear - 4])
+        : (activeYear ? { x: CX, y: TRUNK_YEAR_Y[activeYear - 1] } : { x: CX, y: CX });
+      // Return to semester circle view
+      zoomTo(pos.x, pos.y, 2.8);
+      setHint('Click a semester');
+    } else if (activeYear && activeTrack) {
+      setActiveYear(null); setActiveSem(null); setModNodes([]); setResNodes([]); setSemNodes([]);
+      setLitSegs(new Set());
+      zoomTo(SPEC_X[activeTrack] ?? CX, 350, 1.3);
+      setHint('Click Y4 or Y5 on the branch');
+    } else if (activeYear && !activeTrack) {
+      setActiveYear(null); setActiveSem(null); setModNodes([]); setResNodes([]); setSemNodes([]);
+      setLitSegs(new Set());
+      homeZoom();
+      setHint('Click a year or a specialty to explore');
+    } else if (revealedTrack) {
+      resetAll();
+    } else {
+      resetAll();
+    }
+  }
+
+  const canGoBack = !!(activeYear || revealedTrack || activeSem || activeMod);
+
+  // ─── DERIVED STATE ───────────────────────────────────────────────────────────
+  const segLit = (key: string) => litSegs.has(key);
+83
+<truncated 8792 bytes>
+d);
+              // Skip Y5 node if track has no Y5 semesters
+              if (year === 5 && track && track.semesters.length <= 2) return null;
+              const pos = getBranchYearPos(tid, BRANCH_YEAR_FRACS[i]);
+              const isActiveYear = activeYear === year;
+              const lit = branchNodeLit[i];
+              // If a year is active, the active one stays visible (or dims to 0.15 if deep), others dim.
+              // If NO year is active yet (just revealed), both Y4 and Y5 are fully visible (1).
+              const focusOpacity = activeYear ? (isActiveYear ? (activeSem ? 0.15 : 1) : DIM) : 1;
+              const isTextDimmed = !!activeYear;
+              const color = track?.color || '#2DD4BF';
+              return (
+                <g key={year} className="nc"
+                  onClick={() => activateYear(tid, year)}
+                  style={{ opacity: focusOpacity, transition: 'opacity 0.4s' }}>
+                  {(lit || isActiveYear) && <circle cx={pos.x} cy={pos.y} r="20" fill={color} opacity="0.15" />}
+                  <circle cx={pos.x} cy={pos.y} r="11"
+                    fill={isActiveYear ? color : lit ? 'var(--bg-card)' : 'var(--bg-main)'}
+                    stroke={color}
+                    strokeWidth={isActiveYear ? 2 : 1.5}
+                    style={{ transition: 'fill 0.4s' }} />
+                  <text x={pos.x} y={pos.y + (isTextDimmed ? 22 : 24)} fontSize={isTextDimmed ? "9" : "12"}
+                    fill={isTextDimmed ? (isActiveYear ? color : lit ? color : 'var(--text-muted)') : (isActiveYear ? color : lit ? color : 'var(--text-main)')}
+                    textAnchor="middle" style={{ transition: 'fill 0.4s, font-size 0.4s', fontWeight: isTextDimmed ? 'normal' : 600 }}>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    textAnchor="middle" style={{ transition: 'fill 0.4s, font-size 0.4s', fontWeight: isTextDimmed ? 'normal' : 600 }}>
+                    Y{year}
+                  </text>
+                </g>
+              );
+            })}
+
+            {/* ── SEMESTER NODES ── */}
+            {semNodes.map(n => {
+              const isActive = activeSem === n.id;
+              const track = activeTrack ? SPECIALTY_NODES.find(s => s.id === activeTrack) : null;
+              const tcolor = track ? track.color : '#2DD4BF';
+              const yearPos = (activeTrack && activeYear)
+                ? getBranchYearPos(activeTrack, BRANCH_YEAR_FRACS[activeYear - 4])
+                : (activeYear ? { x: CX, y: TRUNK_YEAR_Y[activeYear - 1] } : { x: CX, y: CX });
+              // Dim heavily if another sem is selected; completely hide if a mod is open on non-active sem
+              // If THIS sem is active, but a module is open, dim it to 15% so it gets out of the way
+              const isSomethingElseActive = !!activeSem && !isActive;
+              const hiddenByMod = !!activeMod && !isActive;
+              const opacity = !n.visible ? 0 : hiddenByMod ? 0 : isSomethingElseActive ? DIM : (activeMod ? 0.15 : 1);
+              const scale = !n.visible ? 0 : hiddenByMod ? 0 : isSomethingElseActive ? 0.5 : 1;
+              const isLeft = n.x < yearPos.x + 1;
+              return (
+       
+<truncated 4386 bytes>
+${tcolor}90`} strokeWidth="1"
+                    style={{ transition: 'fill 0.3s' }} />
+                  <text x={n.x} y={n.y + (above ? -12 : 16)} fontSize="7.5"
+                    fill={isActive ? tcolor : 'var(--text-main)'} textAnchor="middle">{n.label}</text>
+                </g>
+              );
+            })}
+
+            {/* ── TITLE ── */}
+            <text x="20" y="26" fontSize="9" fill="#2DD4BF" letterSpacing="2">NHSM · TREE OF KNOWLEDGE</text>
+          </svg>
+        </div>{/* end inner (transformable) */}
+
+        {/* Hint text */}
+        <div style={{
+          position: 'fixed', bottom: 14, left: '50%', transform: 'translateX(-50%)',
+          fontSize: 8, letterSpacing: '0.2em', color: 'var(--text-muted)',
+          textTransform: 'uppercase', pointerEvents: 'none', whiteSpace: 'nowrap', zIndex: 50
+        }}>
+          {hint}
+        </div>
+
+        {/* Back button — fixed so it stays visible even when zoomed */}
+        {canGoBack && (
+          <button onClick={resetAll}
+            style={{
+              position: 'fixed', bottom: 40, left: 16, zIndex: 200,
+              width: 34, height: 34, background: 'var(--bg-overlay)',
+              border: '1px solid rgba(45,212,191,0.25)', borderRadius: 5,
+              color: '#2DD4BF', fontSize: 18, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontFamily: 'inherit', userSelect: 'none', transition: 'border-color 0.2s',
+              paddingBottom: 2
+            }}>
+            ⌂
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

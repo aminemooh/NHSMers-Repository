@@ -1,0 +1,211 @@
+          makeModule('y3s6-mod1', 'Differential Geometry', BASIC_TYPES),
+          makeModule('y3s6-mod2', 'Field Extensions & Galois Theory', BASIC_TYPES),
+          makeModule('y3s6-mod3', 'Transforms & Integration', BASIC_TYPES),
+          makeModule('y3s6-mod4', 'Regression Models', BASIC_TYPES),
+          makeModule('y3s6-mod5', 'Continuous Optimization', PROJ_TYPES),
+          makeModule('y3s6-mod6', 'Data Mining', PROJ_TYPES),
+          makeModule('y3s6-mod7', 'AI', PROJ_TYPES),
+          makeModule('y3s6-mod8', 'Numerical Analysis of Differential Equations', LAB_TYPES),
+        ],
+      },
+    ],
+  },
+];
+
+const SPECIALTY_NODES: SpecialtyNode[] = [
+  {
+    id: 'ms', label: 'Modeling & Simulation', abbr: 'MS', color: '#10B981',
+    semesters: [
+      { id: 'ms-s7', label: 'Semester 1', modules: [makeModule('ms-1', 'MS Module 1')] },
+      { id: 'ms-s8', label: 'Semester 2', modules: [makeModule('ms-2', 'MS Module 2')] },
+      { id: 'ms-s9', label: 'Semester 3', modules: [makeModule('ms-3', 'MS Module 3')] },
+    ]
+  },
+  {
+    id: 'sea', label: 'Statistics & Econometrics', abbr: 'SEA', color: '#3B82F6',
+    semesters: [
+      { id: 'sea-s7', label: 'Semester 1', modules: [makeModule('sea-1', 'SEA Module 1')] },
+      { id: 'sea-s8', label: 'Semester 2', modules: [makeModule('sea-2', 'SEA Module 2')] },
+      { id: 'sea-s9', label: 'Semester 3', modules: [makeModule('sea-3', 'SEA Module 3')] },
+    ]
+  },
+  {
+    id: 'ccs', label: 'Cryptology & Security', abbr: 'CCS', color: '#8B5CF6',
+    semesters: [
+      { id: 'ccs-s7', label: 'Semester 1', modules: [makeModule('ccs-1', 'CCS Module 1')] },
+      { id: 'ccs-s8', label: 'Semester 2', modules: [makeModule('ccs-2', 'CCS Module 2')] },
+      { id: 'ccs-s9', label: 'Semester 3', modules: [makeModule('ccs-3', 'CCS Module 3')] },
+    ]
+  },
+  {
+    id: 'mp', label: 'Mathematical Physics', abbr: 'MP', color: '#F59E0B',
+    semesters: [
+      { id: 'mp-s7', label: 'Semester 1', modules: [makeModule('mp-1', 'MP Module 1')] },
+      { id: 'mp-s8', label: 'Semester 2', modules: [makeModule('mp-2', 'MP Module 2')] },
+      { id: 'mp-s9', label: 'Semester 3', modules: [makeModule('mp-3', 'MP Module 3')] },
+    ]
+  },
+  {
+    id: 'imm', label: 'International Masters in Mathematics', abbr: 'IMM', color: '#EF4444',
+    semesters: [
+      { id: 'imm-s7', label: 'Semester 1', modules: [makeModule('imm-1', 'IMM Module 1')] },
+      { id: 'imm-s8', label: 'Semester 2', modules: [makeModule('imm-2', 'IMM Module 2')] },
+      { id: 'imm-s9', label: 'Semester 3', modules: [makeModule('imm-3', 'IMM Module 3')] },
+    ]
+  }
+];
+
+interface AnimNode {
+  id: string;
+  label: string;
+  x: number;
+  y: number;
+  cx: number;
+  cy: number;
+  visible: boolean;
+}
+
+export default function ResourcesPage() {
+  const [activeYear, setActiveYear] = useState<number | null>(null);
+  const [activeSem, setActiveSem] = useState<string | null>(null);
+  const [activeMod, setActiveMod] = useState<string | null>(null);
+  const [activeRes, setActiveRes] = useState<string | null>(null);
+  const [activeTrack, setActiveTrack] = useState<string | null>(null);
+  const [revealedTrack, setRevealedTrack] = useState<string | null>(null);
+  const [hoverId, setHoverId] = useState<string | null>(null);
+  const [hint, setHint] = useState<string>('Click a year or a specialty to explore');
+
+  const [semNodes, setSemNodes] = useState<AnimNode[]>([]);
+  const [modNodes, setModNodes] = useState<AnimNode[]>([]);
+  const [resNodes, setResNodes] = useState<AnimNode[]>([]);
+  
+  const [litSegs, setLitSegs] = useState<Set<string>>(new Set());
+  const [transform, setTransform] = useState({ scale: 1.2, tx: 0, ty: 0 });
+
+  const CX = 500;
+  const CY_START = 800;
+  const Y_GAP = 120;
+  const Y_SPLIT = CY_START - Y_GAP * 2.5;
+
+  const BRANCH_YEAR_FRACS = [0.4, 0.8];
+  const SPEC_X: Record<string, number> = {}; 
+  SPECIALTY_NODES.forEach((spec, i) => {
+    const angle = (Math.PI / (SPECIALTY_NODES.length - 1)) * i;
+    SPEC_X[spec.id] = CX + Math.cos(angle + Math.PI) * 350;
+  });
+
+  function getBranchYearPos(trackId: string, frac: number) {
+    const idx = SPECIALTY_NODES.findIndex(s => s.id === trackId);
+    const angle = (Math.PI / (SPECIALTY_NODES.length - 1)) * idx;
+    const bx = CX + Math.cos(angle + Math.PI) * 350;
+    const by = Y_SPLIT - 250 - Math.sin(angle) * 150;
+    const t = frac;
+    const mt = 1 - t;
+    const x = mt*mt*CX + 2*mt*t*CX + t*t*bx;
+    const y = mt*mt*Y_SPLIT + 2*mt*t*(by+100) + t*t*by;
+    return { x, y };
+  }
+
+  function applyZoom(t: typeof transform, smooth = true) {
+    setTransform(t);
+  }
+  function zoomTo(cx: number, cy: number, scale: number) {
+    const W = 1000, H = 1000;
+    applyZoom({ scale, tx: W/2 - cx*scale, ty: H/2 - cy*scale }, true);
+  }
+  function homeZoom() {
+    zoomTo(500, 500, 1.2);
+  }
+
+  function bloomPositions(cx: number, cy: number, count: number, r: number) {
+    if (count === 1) return [{x: cx, y: cy - r}];
+    if (count === 2) return [{x: cx - r, y: cy}, {x: cx + r, y: cy}];
+    return Array.from({length: count}).map((_, i) => {
+      const a = (Math.PI * 2 * i) / count - Math.PI/2;
+      return { x: cx + Math.cos(a)*r, y: cy + Math.sin(a)*r };
+    });
+  }
+
+  function getBloomCenter(cx: number, cy: number, count: number, r: number) {
+    return { bcx: cx, bcy: cy };
+  }
+
+  const MIN_MOD_RADIUS = 80;
+  const MIN_RES_RADIUS = 50;
+  const TRUNK_YEAR_Y = [CY_START, CY_START - Y_GAP, CY_START - Y_GAP*2];
+  const DIM = 0.15;
+
+  function activateYear(trackId: string, year: number) {
+    setActiveYear(year);
+    setActiveTrack(trackId);
+    setActiveSem(null);
+    setActiveMod(null);
+    setActiveRes(null);
+    const track = SPECIALTY_NODES.find(s => s.id === trackId);
+    const yrFrac = BRANCH_YEAR_FRACS[year - 4];
+    const pos = getBranchYearPos(trackId, yrFrac);
+    zoomTo(pos.x, pos.y, 2.8);
+    if (track) {
+      const semStart = (year - 4) * 2;
+      const sems = track.semesters.slice(semStart, semStart + 2);
+      bloomSemNodes(pos.x, pos.y, sems, setSemNodes);
+    }
+  }
+
+  function handleNodeClick(type: string, id: string, year?: number) {
+    if (type === 'year') {
+      setActiveYear(activeYear === year ? null : year!);
+      setActiveTrack(null);
+      setActiveSem(null);
+      setActiveMod(null);
+      if (year) {
+        zoomTo(CX, TRUNK_YEAR_Y[year - 1], 2.8);
+        const yNode = YEAR_NODES[year - 1];
+        if (yNode) bloomSemNodes(CX, TRUNK_YEAR_Y[year - 1], yNode.semesters, setSemNodes);
+      } else {
+        homeZoom();
+      }
+    } else if (type === 'track') {
+      if (revealedTrack === id) {
+        setRevealedTrack(null);
+        setLitSegs(new Set());
+        homeZoom();
+      } else {
+        setRevealedTrack(id);
+        setActiveYear(null);
+        setActiveTrack(id);
+        setActiveSem(null);
+        setActiveMod(null);
+        const sgs = new Set<string>();
+        sgs.add('y1'); sgs.add('y2'); sgs.add('y3'); sgs.add(id);
+        setLitSegs(sgs);
+        zoomTo(SPEC_X[id], 350, 1.3);
+      }
+    } else if (type === 'semester') {
+      setActiveSem(activeSem === id ? null : id);
+      setActiveMod(null);
+    } else if (type === 'module') {
+      setActiveMod(activeMod === id ? null : id);
+    }
+  }
+
+  function activateSem(semId: string) {
+    setActiveSem(semId);
+    const n = semNodes.find(x => x.id === semId);
+    if (n) {
+      zoomTo(n.x, n.y, 3.4);
+      const sn = (activeTrack ? SPECIALTY_NODES.find(s=>s.id===activeTrack)?.semesters : YEAR_NODES.flatMap(y=>y.semesters))?.find(s=>s.id===semId);
+      if (sn) bloomNodes(n.x, n.y, sn.modules.map(m=>({id: m.id, label: m.label})), MIN_MOD_RADIUS, setModNodes, 50);
+    }
+  }
+
+  function activateMod(modId: string) {
+    setActiveMod(modId);
+    const n = modNodes.find(x => x.id === modId);
+    if (n) {
+      zoomTo(n.x, n.y, 4.0);
+      const sem = (activeTrack ? SPECIALTY_NODES.find(s=>s.id===activeTrack)?.semesters : YEAR_NODES.flatMap(y=>y.semesters))?.find(s=>s.id===activeSem);
+      const mod = sem?.modules.find(m=>m.id===modId);
+      if (mod) bloomNodes(n.x, n.y, mod.types.map(m=>({id: m.id, label: m.label})), MIN_RES_RADIUS, setResNodes, 40);
+    }
+  }

@@ -1,0 +1,92 @@
+Created At: 2026-06-18T19:49:37Z
+Completed At: 2026-06-18T19:49:37Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/specialties/page.tsx`
+Total Lines: 639
+Total Bytes: 38343
+Showing lines 1 to 639
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: 'use client';
+2: 
+3: import { useState } from 'react';
+4: 
+5: // ============================================================
+6: // ALL TEXT IS TAKEN WORD-FOR-WORD FROM docs/Specility descritpion.txt
+7: // AND gemini-code-1781806298947.md
+8: // ============================================================
+9: 
+10: interface Division {
+11:   name: string;
+12:   desc: string;
+13: }
+14: 
+15: interface Specialty {
+16:   id: string;
+17:   name: string;
+18:   abbr: string;
+19:   color: string;
+20:   icon: string;
+21:   generalIdea: string;
+22:   prereqs: string;
+23:   prereqClarification: string;
+24:   y3Important: string;
+25:   y3Note: string;
+26:   y4s7: string;
+27:   y4s8: string;
+28:   y5s9: string;
+29:   divisions: Division[];
+30:   projects: string[];
+31:   internships: string;
+32:   advice: string;
+33: }
+34: 
+35: const SPECIALTIES: Specialty[] = [
+36:   {
+37:     id: 'ms',
+38:     name: 'Modeling And Simulation',
+39:     abbr: 'MS',
+40:     color: '#00d4ff',
+41:     icon: '∫',
+42:     // Exact text from [Modeling And Simulation] > [[General Idea]]
+43:     generalIdea:
+44:       'It is a path that bridges rigorous theoretical mathematics with its vast applications in technology and real-world dynamics. It trains students to translate complex, real-world challenges into solvable mathematical models. Backed by a strong analytical foundation, graduates are equipped to tackle problems across a broad spectrum of cutting-edge fields, including computational physics, control and automation, computer vision, and biomathematics.',
+45:   
+<truncated 37908 bytes>
+ gap-4 p-5 text-left"
+603:                 onClick={() => setMobileOpenId(isOpen ? null : sp.id)}>
+604:                 <div className="flex-shrink-0 flex items-center justify-center" style={{
+605:                   width: 48, height: 48, transform: 'rotate(45deg)',
+606:                   background: sp.color + '20', border: `1.5px solid ${sp.color}55`,
+607:                   boxShadow: isOpen ? `0 0 20px ${sp.color}35` : 'none',
+608:                   transition: 'all 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
+609:                 }}>
+610:                   <span className="font-bold text-lg" style={{ transform: 'rotate(-45deg)', color: sp.color, fontFamily: 'Georgia, serif' }}>{sp.icon}</span>
+611:                 </div>
+612:                 <div className="flex-1 min-w-0">
+613:                   <div className="text-xs font-bold tracking-widest uppercase mb-0.5" style={{ color: sp.color }}>{sp.abbr}</div>
+614:                   <div className="font-semibold text-white text-sm">{sp.name}</div>
+615:                 </div>
+616:                 <span style={{
+617:                   color: sp.color, display: 'inline-block',
+618:                   transform: isOpen ? 'rotate(180deg)' : 'none',
+619:                   transition: 'transform 0.35s cubic-bezier(0.25, 1, 0.5, 1)',
+620:                   fontSize: 18, flexShrink: 0,
+621:                 }}>▾</span>
+622:               </button>
+623:               <div style={{
+624:                 maxHeight: isOpen ? '9000px' : 0,
+625:                 overflow: 'hidden',
+626:                 transition: 'max-height 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
+627:               }}>
+628:                 <div className="px-5 pb-6 pt-2 border-t" style={{ borderColor: sp.color + '20' }}>
+629:                   <MindMapContent specialty={sp} />
+630:                 </div>
+631:               </div>
+632:             </div>
+633:           );
+634:         })}
+635:       </div>
+636:     </>
+637:   );
+638: }
+639: 
+The above content shows the entire, complete file contents of the requested file.

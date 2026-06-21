@@ -15,10 +15,11 @@ export default function AdminLoginPage() {
     e.preventDefault();
     setError("");
 
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
+    // Hardcoded credentials as requested
+    if (email === "mahfoud.mohamed.alamine13@gmail.com" && password === "131313") {
+      localStorage.setItem("isAdminLoggedIn", "true");
       router.push("/admin");
-    } catch {
+    } else {
       setError("Invalid email or password");
     }
   };
@@ -44,7 +45,7 @@ export default function AdminLoginPage() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-blue-500"
+              className="w-full p-2 rounded bg-gray-800 border border-gray-700 text-foreground focus:outline-none focus:border-blue-500"
               required
             />
           </div>
@@ -58,14 +59,14 @@ export default function AdminLoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 rounded bg-gray-800 border border-gray-700 text-white focus:outline-none focus:border-blue-500"
+              className="w-full p-2 rounded bg-gray-800 border border-gray-700 text-foreground focus:outline-none focus:border-blue-500"
               required
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2 transition-colors"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-foreground font-bold py-2 px-4 rounded mt-2 transition-colors"
           >
             Login
           </button>

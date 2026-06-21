@@ -1,0 +1,75 @@
+Created At: 2026-06-20T19:51:44Z
+Completed At: 2026-06-20T19:51:44Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 1135
+Total Bytes: 48992
+Showing lines 1000 to 1135
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1000:                     textAnchor="middle" style={{ transition: 'fill 0.4s, font-size 0.4s', fontWeight: isTextDimmed ? 'normal' : 600 }}>
+1001:                     Y{year}
+1002:                   </text>
+1003:                 </g>
+1004:               );
+1005:             })}
+1006: 
+1007:             {/* ── SEMESTER NODES ── */}
+1008:             {semNodes.map(n => {
+1009:               const isActive = activeSem === n.id;
+1010:               const track = activeTrack ? SPECIALTY_NODES.find(s => s.id === activeTrack) : null;
+1011:               const tcolor = track ? track.color : '#2DD4BF';
+1012:               const yearPos = (activeTrack && activeYear)
+1013:                 ? getBranchYearPos(activeTrack, BRANCH_YEAR_FRACS[activeYear - 4])
+1014:                 : (activeYear ? { x: CX, y: TRUNK_YEAR_Y[activeYear - 1] } : { x: CX, y: CX });
+1015:               // Dim heavily if another sem is selected; completely hide if a mod is open on non-active sem
+1016:               // If THIS sem is active, but a module is open, dim it to 15% so it gets out of the way
+1017:               const isSomethingElseActive = !!activeSem && !isActive;
+1018:               const hiddenByMod = !!activeMod && !isActive;
+1019:               const opacity = !n.visible ? 0 : hiddenByMod ? 0 : isSomethingElseActive ? DIM : (activeMod ? 0.15 : 1);
+1020:               const scale = !n.visible ? 0 : hiddenByMod ? 0 : isSomethingElseActive ? 0.5 : 1;
+1021:               const isLeft = n.x < yearPos.x + 1;
+1022:               return (
+1023:        
+<truncated 4386 bytes>
+${tcolor}90`} strokeWidth="1"
+1095:                     style={{ transition: 'fill 0.3s' }} />
+1096:                   <text x={n.x} y={n.y + (above ? -12 : 16)} fontSize="7.5"
+1097:                     fill={isActive ? tcolor : 'var(--text-main)'} textAnchor="middle">{n.label}</text>
+1098:                 </g>
+1099:               );
+1100:             })}
+1101: 
+1102:             {/* ── TITLE ── */}
+1103:             <text x="20" y="26" fontSize="9" fill="#2DD4BF" letterSpacing="2">NHSM · TREE OF KNOWLEDGE</text>
+1104:           </svg>
+1105:         </div>{/* end inner (transformable) */}
+1106: 
+1107:         {/* Hint text */}
+1108:         <div style={{
+1109:           position: 'fixed', bottom: 14, left: '50%', transform: 'translateX(-50%)',
+1110:           fontSize: 8, letterSpacing: '0.2em', color: 'var(--text-muted)',
+1111:           textTransform: 'uppercase', pointerEvents: 'none', whiteSpace: 'nowrap', zIndex: 50
+1112:         }}>
+1113:           {hint}
+1114:         </div>
+1115: 
+1116:         {/* Back button — fixed so it stays visible even when zoomed */}
+1117:         {canGoBack && (
+1118:           <button onClick={resetAll}
+1119:             style={{
+1120:               position: 'fixed', bottom: 40, left: 16, zIndex: 200,
+1121:               width: 34, height: 34, background: 'var(--bg-overlay)',
+1122:               border: '1px solid rgba(45,212,191,0.25)', borderRadius: 5,
+1123:               color: '#2DD4BF', fontSize: 18, cursor: 'pointer',
+1124:               display: 'flex', alignItems: 'center', justifyContent: 'center',
+1125:               fontFamily: 'inherit', userSelect: 'none', transition: 'border-color 0.2s',
+1126:               paddingBottom: 2
+1127:             }}>
+1128:             ⌂
+1129:           </button>
+1130:         )}
+1131:       </div>
+1132:     </div>
+1133:   );
+1134: }
+1135: 
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

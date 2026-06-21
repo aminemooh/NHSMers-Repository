@@ -1,0 +1,102 @@
+[
+  {
+    "index": 16,
+    "len": 975,
+    "preview": "{\"step_index\":17,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-18T17:45:"
+  },
+  {
+    "index": 184,
+    "len": 4177,
+    "preview": "{\"step_index\":189,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-18T19:25"
+  },
+  {
+    "index": 187,
+    "len": 4163,
+    "preview": "{\"step_index\":192,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-18T19:26"
+  },
+  {
+    "index": 233,
+    "len": 1504,
+    "preview": "{\"step_index\":239,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-18T19:38"
+  },
+  {
+    "index": 349,
+    "len": 3214,
+    "preview": "{\"step_index\":356,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-18T19:50"
+  },
+  {
+    "index": 352,
+    "len": 4323,
+    "preview": "{\"step_index\":359,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-18T19:50"
+  },
+  {
+    "index": 355,
+    "len": 4160,
+    "preview": "{\"step_index\":362,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-18T19:50"
+  },
+  {
+    "index": 358,
+    "len": 4225,
+    "preview": "{\"step_index\":365,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-18T19:50"
+  },
+  {
+    "index": 364,
+    "len": 1597,
+    "preview": "{\"step_index\":371,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-18T19:51"
+  },
+  {
+    "index": 391,
+    "len": 823,
+    "preview": "{\"step_index\":398,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-18T19:52"
+  },
+  {
+    "index": 409,
+    "len": 4210,
+    "preview": "{\"step_index\":420,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-20T19:51"
+  },
+  {
+    "index": 412,
+    "len": 4193,
+    "preview": "{\"step_index\":423,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-20T19:51"
+  },
+  {
+    "index": 415,
+    "len": 4311,
+    "preview": "{\"step_index\":426,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-20T19:51"
+  },
+  {
+    "index": 430,
+    "len": 4315,
+    "preview": "{\"step_index\":441,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-20T19:52"
+  },
+  {
+    "index": 477,
+    "len": 4322,
+    "preview": "{\"step_index\":489,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-20T19:56"
+  },
+  {
+    "index": 506,
+    "len": 801,
+    "preview": "{\"step_index\":518,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-20T19:57"
+  },
+  {
+    "index": 510,
+    "len": 976,
+    "preview": "{\"step_index\":522,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-20T19:57"
+  },
+  {
+    "index": 522,
+    "len": 4525,
+    "preview": "{\"step_index\":534,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-20T19:58"
+  },
+  {
+    "index": 548,
+    "len": 2921,
+    "preview": "{\"step_index\":560,\"source\":\"MODEL\",\"type\":\"PLANNER_RESPONSE\",\"status\":\"DONE\",\"created_at\":\"2026-06-2"
+  },
+  {
+    "index": 556,
+    "len": 4460,
+    "preview": "{\"step_index\":571,\"source\":\"MODEL\",\"type\":\"VIEW_FILE\",\"status\":\"DONE\",\"created_at\":\"2026-06-20T20:01"
+  }
+]

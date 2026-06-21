@@ -1,0 +1,89 @@
+Created At: 2026-06-18T19:50:50Z
+Completed At: 2026-06-18T19:50:51Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 907
+Total Bytes: 34324
+Showing lines 160 to 240
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+160:           makeModule('y3s5-mod8', 'Algebra and coding'),
+161:         ],
+162:       },
+163:       {
+164:         id: 'y3s6',
+165:         label: 'Semester 2',
+166:         modules: [
+167:           makeModule('y3s6-mod1', 'Numerical Analysis of Differential Equations', LAB_TYPES),
+168:           makeModule('y3s6-mod2', 'Integral Transformation'),
+169:           makeModule('y3s6-mod3', 'Differential geometry'),
+170:           makeModule('y3s6-mod4', 'Field Extensions'),
+171:           makeModule('y3s6-mod5', 'Artificial Intelligence', ALL_TYPES),
+172:           makeModule('y3s6-mod6', 'Regression Models', PROJ_TYPES),
+173:           makeModule('y3s6-mod7', 'Data Mining', PROJ_TYPES),
+174:           makeModule('y3s6-mod8', 'Continuous Optimization'),
+175:         ],
+176:       },
+177:     ],
+178:   },
+179: ];
+180: 
+181: const SPECIALTY_NODES: SpecialtyNode[] = [
+182:   {
+183:     id: 'ms',
+184:     label: 'Modeling & Simulation',
+185:     abbr: 'MS',
+186:     color: '#00d4ff',
+187:     svgX: 87,
+188:     svgY: 415,
+189:     semesters: [
+190:       {
+191:         id: 'ms-s7',
+192:         label: 'Fourth Year - Semester 1',
+193:         modules: [
+194:           makeModule('ms-s7-mod1', 'Intro. to Modeling Continuous Environments', LAB_TYPES),
+195:           makeModule('ms-s7-mod2', 'Control of Differential Equations', LAB_TYPES),
+196:           makeModule('ms-s7-mod3', 'Digital Image Processing', PROJ_TYPES),
+197:           makeModule('ms-s7-mod4', 'Matrix Numerical Analysis'),
+198:           makeModule('ms-s7-mod5', 'Distributions and application'),
+199:           makeModule('ms-s7-mod6', 'Stochastic Simulations', LAB_TYPES),
+200:           makeModule('ms-s7-mod7', 'Modeling Workshop', PROJ_TYPES),
+201:         ],
+202:       },
+203:       {
+204:         id: 'ms-s8',
+205:         label: 'Fourth Year - Semester 2',
+206:         modules: [
+207:           makeModule('ms-s8-mod1', 'None-Variational Methods'),
+208:           makeModule('ms-s8-mod2', 'Stochastic Differential Equations'),
+209:           makeModule('ms-s8-mod3', 'Intro. to Biological Modeling', LAB_TYPES),
+210:           makeModule('ms-s8-mod4', 'Fluid Mechanics', LAB_TYPES),
+211:           makeModule('ms-s8-mod5', 'Artificial Vision', PROJ_TYPES),
+212:           makeModule('ms-s8-mod6', 'Fractional Differential Equations'),
+213:           makeModule('ms-s8-mod7', 'Convex Optimization', PROJ_TYPES),
+214:           makeModule('ms-s8-mod8', 'Into. to Business', PROJ_TYPES),
+215:         ],
+216:       },
+217:       {
+218:         id: 'ms-s9',
+219:         label: 'Fifth Year - Semester 1',
+220:         modules: [
+221:           makeModule('ms-s9-mod1', 'Image processing', PROJ_TYPES),
+222:           makeModule('ms-s9-mod2', 'Numerical Fluid Mechanics', LAB_TYPES),
+223:           makeModule('ms-s9-mod3', 'Intro. to Epidemiological Modeling', PROJ_TYPES),
+224:           makeModule('ms-s9-mod4', 'Bayesian Inference', LAB_TYPES),
+225:           makeModule('ms-s9-mod5', 'Modeling Workshop 2', PROJ_TYPES),
+226:         ],
+227:       },
+228:     ],
+229:   },
+230:   {
+231:     id: 'sesa',
+232:     label: 'Statistics & Econometrics',
+233:     abbr: 'SESA',
+234:     color: '#a855f7',
+235:     svgX: 237,
+236:     svgY: 415,
+237:     semesters: [
+238:       {
+239:         id: 'sesa-s7',
+240:         label: 'Fourth Year - Semester 1',
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.

@@ -16,20 +16,17 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
+    const isLogged = localStorage.getItem("isAdminLoggedIn") === "true";
+    setUser(isLogged ? { uid: 'admin' } as any : null);
+    setLoading(false);
 
-      if (!currentUser && pathname !== "/admin/login") {
-        router.push("/admin/login");
-      }
+    if (!isLogged && pathname !== "/admin/login") {
+      router.push("/admin/login");
+    }
 
-      if (currentUser && pathname === "/admin/login") {
-        router.push("/admin");
-      }
-    });
-
-    return () => unsubscribe();
+    if (isLogged && pathname === "/admin/login") {
+      router.push("/admin");
+    }
   }, [router, pathname]);
 
   if (loading) {

@@ -1,0 +1,69 @@
+Created At: 2026-06-18T19:50:37Z
+Completed At: 2026-06-18T19:50:37Z
+File Path: `file:///c:/Users/CONFORT%20TECH/Desktop/NHSMers%20Repository/NHSMers-Repository/src/app/resources/page.tsx`
+Total Lines: 907
+Total Bytes: 34324
+Showing lines 100 to 160
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+100:         ],
+101:       },
+102:     ],
+103:   },
+104:   {
+105:     id: 'y2',
+106:     label: 'Second Year',
+107:     sublabel: '(Classe Préparatoire)',
+108:     type: 'trunk',
+109:     svgX: 350,
+110:     svgY: 155,
+111:     semesters: [
+112:       {
+113:         id: 'y2s3',
+114:         label: 'Semester 3',
+115:         modules: [
+116:           makeModule('y2s3-mod1', 'Analyse 3'),
+117:           makeModule('y2s3-mod2', 'Espaces topologiques et espaces métriques'),
+118:           makeModule('y2s3-mod3', 'Algèbre 3'),
+119:           makeModule('y2s3-mod4', 'Géométrie 1'),
+120:           makeModule('y2s3-mod5', 'Analyse numérique 1', PROJ_TYPES),
+121:           makeModule('y2s3-mod6', 'Probabilités 2'),
+122:           makeModule('y2s3-mod7', 'Anglais 3'),
+123:         ],
+124:       },
+125:       {
+126:         id: 'y2s4',
+127:         label: 'Semester 4',
+128:         modules: [
+129:           makeModule('y2s4-mod1', 'Analyse 4'),
+130:           makeModule('y2s4-mod2', 'Mesure et intégration'),
+131:           makeModule('y2s4-mod3', 'Géométrie 2'),
+132:           makeModule('y2s4-mod4', 'Espaces vectoriels normés et espaces vectoriels topologiques'),
+133:           makeModule('y2s4-mod5', 'Outils pour la programmation mathématique', PROJ_TYPES),
+134:           makeModule('y2s4-mod6', 'Analyse numérique 2', LAB_TYPES),
+135:           makeModule('y2s4-mod7', 'Géopolitique et stratégie'),
+136:           makeModule('y2s4-mod8', 'Anglais 4'),
+137:         ],
+138:       },
+139:     ],
+140:   },
+141:   {
+142:     id: 'y3',
+143:     label: 'Third Year',
+144:     sublabel: 'Common Core',
+145:     type: 'split',
+146:     svgX: 350,
+147:     svgY: 255,
+148:     semesters: [
+149:       {
+150:         id: 'y3s5',
+151:         label: 'Semester 1',
+152:         modules: [
+153:           makeModule('y3s5-mod1', 'Partial Differential Equations', LAB_TYPES),
+154:           makeModule('y3s5-mod2', 'Ordinary Differential Equations'),
+155:           makeModule('y3s5-mod3', 'Functional Analysis'),
+156:           makeModule('y3s5-mod4', 'Complex Analysis'),
+157:           makeModule('y3s5-mod5', 'Oriented Object Programming', PROJ_TYPES),
+158:           makeModule('y3s5-mod6', 'Stochastic processes'),
+159:           makeModule('y3s5-mod7', 'Inferential Statistics'),
+160:           makeModule('y3s5-mod8', 'Algebra and coding'),
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
