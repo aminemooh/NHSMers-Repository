@@ -29,9 +29,10 @@ const LANG_TYPES = RESOURCE_TYPES.filter(t => ['lectures', 'exams'].includes(t.i
 
 const driveLinks: Record<string, Record<string, string>> = {
   "Analysis 1": {
+    "lectures": "https://drive.google.com/drive/folders/17trYn2mgoiMjf-j_r3-UrmN7CoTAO5u7?usp=drive_link",
+    "td": "https://drive.google.com/drive/folders/1uCT4SWp5xJUWe9geMKoverFgwmqve_pw?usp=drive_link",
     "exams": "https://drive.google.com/drive/folders/14LK9xCkMeKzq8uGNGc2llMaplDX35oUX?usp=drive_link",
-    "resources": "https://drive.google.com/drive/folders/1e8yd2kruxW4RHgv5rrWkfSNbVHfnoilr?usp=drive_link",
-    "lectures": "https://drive.google.com/drive/folders/1uCT4SWp5xJUWe9geMKoverFgwmqve_pw?usp=drive_link"
+    "resources": "https://drive.google.com/drive/folders/1e8yd2kruxW4RHgv5rrWkfSNbVHfnoilr?usp=drive_link"
   },
   "Algebra 1": {
     "lectures": "https://drive.google.com/drive/folders/1w-oKTToIQkcWyzeQJOBZuX8TBdQHKSth?usp=drive_link",
@@ -574,9 +575,12 @@ export default function ResourcesPage() {
     const el = wrapRef.current;
     const W = el?.clientWidth  || window.innerWidth;
     const H = el?.clientHeight || window.innerHeight;
-    const treeW = 800;
-    const treeH = 560;
-    const PADDING = 40;
+    const isMobile = W < 640;
+    // On mobile use tighter content bounds (actual tree visual area: 600×460)
+    // and minimal padding so the tree fills as much of the screen as possible
+    const treeW = isMobile ? 600 : 800;
+    const treeH = isMobile ? 460 : 560;
+    const PADDING = isMobile ? 15 : 40;
     return Math.min((W - PADDING*2) / treeW, (H - PADDING*2) / treeH);
   }
   function clampScale(s: number) {
@@ -603,12 +607,35 @@ export default function ResourcesPage() {
   function resetZoom() {
     const W = wrapRef.current?.clientWidth  || window.innerWidth;
     const H = wrapRef.current?.clientHeight || window.innerHeight;
+    const isMobile = W < 640;
     const s = getMinScale();
     const treeCX = 450;
-    const treeCY = 340;
+    // On mobile center slightly lower so the trunk is the focal point
+    const treeCY = isMobile ? 380 : 340;
     applyZoom({ scale: s, tx: W/2 - treeCX*s, ty: H/2 - treeCY*s }, true);
   }
   useEffect(() => { resetZoom(); }, []);
+
+  // ── Touch panning support for mobile ──────────────────────────────────────
+  const touchStartRef = useRef<{ x: number; y: number; tx: number; ty: number } | null>(null);
+
+  function handleTouchStart(e: React.TouchEvent) {
+    if (e.touches.length !== 1) return;
+    const t = e.touches[0];
+    touchStartRef.current = { x: t.clientX, y: t.clientY, tx: liveZoom.current.tx, ty: liveZoom.current.ty };
+  }
+  function handleTouchMove(e: React.TouchEvent) {
+    if (e.touches.length !== 1 || !touchStartRef.current) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    const dx = t.clientX - touchStartRef.current.x;
+    const dy = t.clientY - touchStartRef.current.y;
+    const newZ = { ...liveZoom.current, tx: touchStartRef.current.tx + dx, ty: touchStartRef.current.ty + dy };
+    applyZoom(newZ, false);
+  }
+  function handleTouchEnd() {
+    touchStartRef.current = null;
+  }
 
   function bloomNodes(cx: number, cy: number, items: any[], radius: number, setter: any, delay=50) {
     const nodes = items.map((obj,i) => {
@@ -812,7 +839,11 @@ export default function ResourcesPage() {
 
   return (
     <div style={{width:'100%',height:'100vh',background:'var(--bg-main, #0B0F19)',overflow:'hidden'}}>
-      <div ref={wrapRef} style={{width:'100%',height:'100%',position:'relative',overflow:'hidden'}}>
+      <div ref={wrapRef} style={{width:'100%',height:'100%',position:'relative',overflow:'hidden'}}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <div style={{position:'absolute',top:0,left:0,transformOrigin:'0 0',
           transition:'transform 0.85s cubic-bezier(0.34,1.1,0.64,1)', transform: transformStyle}}>
           <svg ref={svgRef} viewBox={`0 0 ${SVG_W} ${SVG_H}`} width={SVG_W} height={SVG_H}
