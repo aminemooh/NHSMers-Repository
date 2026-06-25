@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Send } from 'lucide-react';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
 
 export default function ContactPage() {
   const [moduleName, setModuleName] = useState('');
@@ -22,30 +24,21 @@ export default function ContactPage() {
     setError('');
 
     try {
-      const response = await fetch("https://formsubmit.co/ajax/mahfoud.mohamed.alamine13@gmail.com", {
-        method: "POST",
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          _subject: "New Resource Contribution - NHSMers Repository",
-          "Module Name / Description": moduleName,
-          "Resource Link": link,
-          "Additional Notes": notes || "None"
-        })
+      // Save to Firestore so it appears in the admin inbox
+      await addDoc(collection(db, 'contributions'), {
+        moduleName,
+        link,
+        notes: notes || '',
+        status: 'pending',
+        timestamp: new Date().toISOString(),
       });
-      
-      if (!response.ok) {
-        throw new Error("Failed to submit.");
-      }
-      
+
       setSuccess(true);
       setModuleName('');
       setLink('');
       setNotes('');
     } catch (err: any) {
-      setError(err.message || 'An error occurred while submitting.');
+      setError(err.message || 'An error occurred while submitting. Please try again.');
     } finally {
       setIsSubmitting(false);
       setTimeout(() => setSuccess(false), 5000);
